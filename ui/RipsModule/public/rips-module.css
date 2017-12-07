@@ -1,0 +1,174 @@
+/* SCAN LIST */
+
+table.severities {
+    border: 0;
+    margin: 0;
+}
+table.severities th,
+table.severities td {
+    text-align: center;
+    border: 0;
+    padding: 2px;
+    height: auto;
+    line-height: normal;
+    width: 25%;
+}
+table.severities td {
+    font-weight: bold;
+}
+
+table.zgrid {
+    table-layout: auto;
+}
+table.zgrid td.details {
+    text-align: center;
+}
+
+.progress-bar {
+    height: 10px;
+    background-color: #c3c3c3;
+    margin-top: 4px;
+    border-radius: 4px;
+    transition: all 500ms ease;
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.7);
+}
+.progress-bar.risk {
+    width: calc(100% - 8px);
+    background: linear-gradient(90deg, rgba(17, 192, 87, 0.5) 5%, rgba(255,225,12,.76) 30%, rgba(255,191,12,.83) 40%, rgba(236,25,86,.92) 90%);
+    padding: 0 4px;
+}
+.progress-bar .spoint {
+    position: relative;
+    top: -4px;
+    height: 18px;
+    width: 4px;
+    background-color: rgba(0,0,0,0.7);
+    border-radius: 4px;
+    transition: all 500ms ease;
+}
+
+/* SEVERITY COLORS */
+
+.severity-critical {
+    color: #ff0000 !important;
+}
+.severity-high {
+    color: #ff8e38 !important;
+}
+.severity-medium {
+    color: #ecbc26 !important;
+}
+.severity-low {
+    color: #149c14 !important;
+}
+
+.severity-critical-bg {
+    background-color: #ff0000 !important;
+}
+.severity-high-bg {
+    background-color: #ff8e38 !important;
+}
+.severity-medium-bg {
+    background-color: #ecbc26 !important;
+}
+.severity-low-bg {
+    background-color: #149c14 !important;
+}
+
+/* SCAN DETAILS */
+
+.ngdialog-content {
+    width: 1000px !important;
+}
+
+.scan {
+    padding: 20px;
+}
+.scan h1 {
+    font-size: 24px;
+}
+.scan h2 {
+    font-size: 18px;
+    margin-top: 4px;
+}
+.scan #new-tabs-container {
+    margin-top: 14px;
+}
+.scan .tab-section {
+    padding: 8px;
+    min-height: 300px;
+}
+
+table.issue-breakdown {
+    padding: 0;
+    margin: 0;
+}
+table.issue-breakdown td.amount {
+    font-weight: bold;
+    text-align: right;
+}
+table.issue-breakdown td.severity {
+    font-weight: bold;
+}
+table.issue-breakdown th,
+table.issue-breakdown td {
+    padding: 6px;
+}
+table.issue-breakdown tbody tr:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+table.issue-breakdown th {
+    border: 0;
+    border-bottom: 1px solid #c3c3c3;
+}
+
+table.issues {
+    padding: 0;
+    margin: 0;
+}
+table.issues th,
+table.issues td {
+    padding: 6px;
+}
+table.issues tbody tr:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+table.issues th {
+    border: 0;
+    border-bottom: 1px solid #c3c3c3;
+}
+table.issues td.path {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+table.issues td.severity {
+    font-weight: bold;
+}
+table.issues td.sink,
+table.issues td.source,
+table.issues td.parameter {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+}
+table.issues td.type {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+/* SETTINGS */
+
+.test-badge {
+    font-size: 20px;
+}
+.test-badge .glyphicons-ok-sign {
+    color: #149c14;
+}
+.test-badge .glyphicons-remove-sign {
+    color: #ff0000;
+}

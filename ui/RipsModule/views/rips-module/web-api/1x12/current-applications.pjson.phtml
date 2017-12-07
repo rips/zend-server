@@ -1,0 +1,21 @@
+"responseData":{
+    "zendApps": [
+    <?php foreach ($zendApps as $i => $app): ?>
+        {
+            "id":<?php echo json_encode($app['id']); ?>,
+            "name":<?php echo json_encode($app['name']); ?>,
+            "path":<?php echo json_encode($app['path']); ?>
+        }
+        <?php if ($i < count($zendApps) - 1) echo ','; ?>
+    <?php endforeach; ?>
+    ],
+    "ripsApps": [
+    <?php foreach ($ripsApps as $i => $app): ?>
+        {
+            "id":<?php echo json_encode($app['id']); ?>,
+            "name":<?php echo json_encode($app['name']); ?>
+        }
+        <?php if ($i < count($ripsApps) - 1) echo ','; ?>
+    <?php endforeach; ?>
+    ]
+}

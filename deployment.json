@@ -1,0 +1,14 @@
+{
+    "name" : "RIPS",
+    "display_name" : "RIPS Code Analysis",
+    "version" : "1.0.0-dev",
+    "type": ["ui"],
+    "logo": "logo.png",
+    "eula": "EULA",
+    "readme": "README.md",
+    "dependencies": {
+        "plugin": {
+            "min": "1.0.0"
+        }
+    }
+}

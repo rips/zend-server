@@ -1,0 +1,146 @@
+<div class="scan">
+    <h1>Scan Details</h1>
+
+    <div ng-if="scanDetails.loading" style="height: 50px; line-height: 50px;">
+        <div class="settings-form-wrapper">
+            <i class="fa fa-spin fa-spinner"></i> Loading...
+        </div>
+    </div>
+
+    <div ng-if="!scanDetails.loading">
+        <h2>
+            <a href="{{scanDetails.ui_url}}/main/(scans/{{currentScan.application.id}}/{{currentScan.id}}//sidebar:types/{{currentScan.application.id}}/{{currentScan.id}}/0)"
+               target="_blank">
+                {{currentScan.application.name}}: {{currentScan.version}}
+            </a>
+        </h2>
+
+        <nav id="new-tabs-container">
+            <ul>
+                <li ng-click="dialogUi.activateTab('Summary');" class="diagonal-tab" ng-class="{'active': (dialogUi.activeTab == 'Summary')}">Summary</li>
+                <li ng-click="dialogUi.activateTab('Issue Breakdown');" class="diagonal-tab" ng-class="{'active': (dialogUi.activeTab == 'Issue Breakdown')}">Issue Breakdown</li>
+                <li ng-click="dialogUi.activateTab('Issues');" class="diagonal-tab" ng-class="{'active': (dialogUi.activeTab == 'Issues')}">Issues</li>
+            </ul>
+        </nav>
+
+        <div class="tab-section" ng-if="dialogUi.activeTab == 'Summary'">
+            <h2 class="text-center">Severity</h2>
+            <div id="severity-chart"></div>
+
+            <h2 class="text-center" style="margin-top: 20px;">Vulnerability Types</h2>
+            <div id="type-chart"></div>
+        </div>
+
+        <div class="tab-section" ng-if="dialogUi.activeTab == 'Issue Breakdown'">
+            <table class="issue-breakdown">
+                <thead>
+                <tr>
+                    <th>Severity</th>
+                    <th>Type</th>
+                    <th>CWE</th>
+                    <th>OWASP Top 10</th>
+                    <th>SANS 25</th>
+                    <th>PCI DSS</th>
+                    <th style="text-align: right;">#Issues</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="type in scanDetails.types">
+                    <td class="severity">
+                        <span class="severity-critical" ng-if="type.type.severity >75">Critical</span>
+                        <span class="severity-high" ng-if="type.type.severity >50 && type.type.severity <=75">High</span>
+                        <span class="severity-medium" ng-if="type.type.severity >25 && type.type.severity <=50">Medium</span>
+                        <span class="severity-low" ng-if="type.type.severity <=25">Low</span>
+                    </td>
+                    <td>
+                        <a href="{{scanDetails.ui_url}}/main/(issues/{{currentScan.application.id}}/{{currentScan.id}}/{{type.type.id}}/0/(content:summary//info:desc)//sidebar:issues/{{currentScan.application.id}}/{{currentScan.id}}/{{type.type.id}}/0)"
+                           target="_blank">
+                            {{type.type.name}}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="https://cwe.mitre.org/data/definitions/{{type.type.cwe}}.html" target="_blank">
+                            {{type.type.cwe}}
+                        </a>
+                    </td>
+                    <td>{{type.type.owasp}}</td>
+                    <td>
+                        <span ng-if="type.type.sans && type.type.sans != 0">{{type.type.sans}}</span>
+                        <span ng-if="!type.type.sans || type.type.sans == 0"><em>none</em></span>
+                    </td>
+                    <td>{{type.type.pcidss}}</td>
+                    <td class="amount">{{type.amount}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-section" ng-if="dialogUi.activeTab == 'Issues'">
+            <div style="text-align: right; margin: 0 0 10px 0;">
+                <span ng-show="!issues.loading">
+                    <a class="btn btn-default" ng-click="issues.load(currentScan.application.id, currentScan.id)">Load Issues</a>
+                </span>
+                    <span ng-show="issues.loading">
+                    <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Load Issues</a>
+                </span>
+            </div>
+
+            <table class="issues">
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Severity</th>
+                    <th>File</th>
+                    <th>Sink</th>
+                    <th>Source</th>
+                    <th>Parameter</th>
+                    <th>&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="issue in issues.issues">
+                    <td class="type">
+                        <a href="{{issues.ui_url}}/main/(issues/{{currentScan.application.id}}/{{currentScan.id}}/{{issue.type.id}}/0/(content:summary//info:desc)//sidebar:issues/{{currentScan.application.id}}/{{currentScan.id}}/{{issue.type.id}}/0)"
+                           target="_blank">
+                            {{issue.type.name}}
+                        </a>
+                    </td>
+                    <td class="severity">
+                        <span class="severity-critical" ng-if="issue.type.severity >75">Critical</span>
+                        <span class="severity-high" ng-if="issue.type.severity >50 && issue.type.severity <=75">High</span>
+                        <span class="severity-medium" ng-if="issue.type.severity >25 && issue.type.severity <=50">Medium</span>
+                        <span class="severity-low" ng-if="issue.type.severity <=25">Low</span>
+                    </td>
+                    <td class="path">
+                        <span ng-if="issue.sink && issue.sink.file && issue.sink.file.path">
+                            {{issue.sink.file.path}}
+                        </span>
+                    </td>
+                    <td class="sink">
+                        <span ng-if="issue.sink && issue.sink.name">
+                            {{issue.sink.name}}
+                        </span>
+                    </td>
+                    <td class="source">
+                        <span ng-if="issue.source && issue.source.name">
+                            {{issue.source.name}}
+                        </span>
+                    </td>
+                    <td class="parameter">
+                        <span ng-if="issue.source && issue.source.parameter">
+                            {{issue.source.parameter}}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{issues.ui_url}}/main/(issues/{{currentScan.application.id}}/{{currentScan.id}}/{{issue.type.id}}/{{issue.id}}/(content:summary//info:desc)//sidebar:issues/{{currentScan.application.id}}/{{currentScan.id}}/{{issue.type.id}}/{{issue.id}})"
+                           target="_blank"
+                           title="Open">
+                            <i class="fa fa-arrow-circle-o-right"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

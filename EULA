@@ -1,0 +1,119 @@
+FOR RIPS SOFTWARE
+VERSION 1.2
+
+IMPORTANT - READ CAREFULLY: THIS END-USER LICENSE AGREEMENT ("EULA" OR "AGREEMENT") IS A LEGALLY BINDING AGREEMENT BETWEEN YOU AS A COMPANY OR A LEGAL ENTITY ("LICENSEE" OR "YOU") AND RIPS TECHNOLOGIES GMBH ("RIPS" OR "LICENSOR") A GERMAN LIMITED LIABILITY COMPANY, HAVING ITS REGISTERED OFFICE AT UNIVERSITAETSSTRASSE 142, D-44799 BOCHUM, FOR THE LICENSEE'S TECHNICAL POSSIBILITY TO USE, ON-PREMISE ("ON-PREMISE-VERSION") OR AS A SERVICE ("SAAS-VERSION"), RIPS SOFTWARE AND ALL ITS COMPONENTS (EXECUTABLES, DOCUMENTATION, AND ALL OTHER FILES) ACCOMPANIED BY OR ORDERED BASED ON THIS EULA (COLLECTIVELY "SOFTWARE").
+
+AS LONG AS THERE IS NO SEPARATE LICENSE AGREEMENT, THIS AGREEMENT ALSO GOVERNS YOUR USE OF ANY UPGRADES, UPDATES, PATCHES, AND HOTFIXES OF THE SOFTWARE THAT REPLACE OR SUPPLEMENT THE ORIGINAL SOFTWARE (COLLECTIVELY "UPDATES"), AND SUCH UPDATES WILL BE CONSIDERED SOFTWARE FOR ALL PURPOSES OF THIS EULA.
+
+NOTE: LICENSOR DOES NOT LICENSE THE SOFTWARE TO INDIVIDUALS.
+
+IF YOU DO NOT AGREE TO BE BOUND BY THIS EULA, OR IF YOU ARE AN INDIVIDUAL, DO NOT DOWNLOAD THE SOFTWARE OR, IF THE SOFTWARE HAS BEEN DELIVERED BY CD ROM, DESTROY THE CD ROM OR RETURN IT OR, IF THE SOFTWARE IS PROVIDED AS A SERVICE, DO NOT USE THE SOFTWARE. IF THE SOFTWARE HAS ALREADY BEEN DOWNLOADED THEN IMMEDIATELY DELETE THE SOFTWARE. IF THE SOFTWARE HAS ALREADY BEEN USED THEN IMMEDIATELY STOP USING THE SOFTWARE. IF APPLICABLE, YOU WILL BE REFUNDED. ONCE THE SOFTWARE HAS BEEN USED OR INSTALLED, ALL OF THE PROVISIONS OF THIS EULA APPLY, EVEN IF THE SOFTWARE IS SUBSEQUENTLY DELETED OR RETURNED. ANY USE OF THE SOFTWARE BY THE LICENSEE SHALL CONSTITUTE UNQUALIFIED ACCEPTANCE OF THIS AGREEMENT.
+
+WARNING - READ CAREFULLY: THE PURPOSE OF THE SOFTWARE IS TO ANALYZE WEB APPLICATIONS CODED IN PHP PROGRAMMING LANGUAGE IN ORDER TO DETECT SECURITY VULNERABILITIES AND PROVIDE INFORMATION TO HELP REMEDIATING SUCH VULNERABILITIES. FOR CORRECT AND SOUND ANALYSIS IT IS NECESSARY TO RECOGNIZE ALL POSSIBLE FUNCTIONALITY THAT IS CONTAINED IN A WEB APPLICATION'S SOURCE CODE. HENCE, NO EFFORTS ARE TAKEN BY THE SOFTWARE TO PROVIDE PROTECTION AGAINST A MAXIMUM POWER CONSUMPTION OF THE SOFTWARE WHICH CAN CAUSE (I) SERVER INSTABILITIES, (II) SERVER CRASHES, AND (III) LOSS OF DATA (COLLECTIVELY "UNAVOIDABLE EFFECTS"). IT IS THE LICENSEE'S SOLE RESPONSIBILITY AND DUTY TO (i) ALWAYS BACKUP ALL OF THE WEBSITE'S AND WEB APPLICATION'S DATA IN DUE TIME AND MANNER; AND (ii), WITH THE EXCEPTION OF RIPS' SAAS-VERSION-SERVER, ASSURE, TAKE CARE, AND GUARANTEE THAT THESE UNAVOIDABLE EFFECTS DO NOT HARM ANY COMPUTER SYSTEMS, NETWORK INFRASTRUCTURE OR DATA WHATSOEVER. IF YOU CANNOT OR WILL NOT GUARANTEE (i) THAT YOU ALWAYS BACKUP ALL OF THE WEBSITE'S AND WEB APPLICATION'S DATA IN DUE TIME AND MANNER; AND (ii) THAT, WITH THE EXCEPTION OF RIPS' SAAS-VERSION-SERVER, THESE UNAVOIDABLE EFFECTS DO NOT HARM ANY COMPUTER SYSTEMS, NETWORK INFRASTRUCTURE OR DATA WHATSOEVER, DO NOT USE THE SOFTWARE.
+
+1A. License and Support (ON-PREMISE-VERSION):
+1A.1 Subject to the terms hereof, the ON-PREMISE-VERSION of the SOFTWARE is provided on a non-exclusive, non-assignable, and non-transferable basis, and may not be copied (except for back-up or disaster recovery purposes), modified, or enhanced without the advance written authorization of RIPS. The LICENSEE may make one or more copies for back-up or disaster recovery purposes, provided that the LICENSEE agrees to not grant access to such copies to any other individual, company or entity.
+
+1A.2 Detailed specifications, requirements and limitations of the SOFTWARE are specified in the description of the license type YOU chose to acquire ("LICENSE TYPE DESCRIPTION"). The LICENSE TYPE DESCRIPTION is deemed to be part of this EULA.
+
+1A.3 The ON-PREMISE-VERSION of the SOFTWARE permits the LICENSEE to use the SOFTWARE solely at his site. The maximum number of allowed applications to be analyzed by the SOFTWARE, and the particular period of time ("TERM") in which the SOFTWARE can be used, are specified (i) in the LICENSE TYPE DESCRIPTION, and (ii) in the invoice which accompanies the SOFTWARE and which is deemed to be part of this EULA, and (ii) can be looked up in the SOFTWARE'S user interface. The LICENSEE acknowledges that the SOFTWARE may contain technical functionality to stop operations after the TERM has expired, the LICENSEE fails to pay due fees, or violates this EULA in any other way.
+
+1A.4 The ON-PREMISE-VERSION of the SOFTWARE is granted to the LICENSEE only and as such does not permit to sell, lend, assign, lease, or transfer in any other way this EULA, the related SOFTWARE or the license key (SOFTWARE and license key, collectively "LICENSE KEY"). LICENSEE is not allowed to offer the operation of the SOFTWARE to third parties in any form. This includes, but is not limited to, providing a mechanism enabling third parties to submit application scans. Any transfer or use in violation of this provision is prohibited and may cause the license to be terminated with no refund of any fees paid. It is the LICENSEE's sole responsibility to protect the LICENSE KEY from (i) any unauthorized access; or (ii) any unauthorized use. If -for any reason- the LICENSEE gets aware of (i) any unauthorized access to the LICENSE KEY; or (ii) any unauthorized use of the LICENSE KEY; or (iii) any incidents that my lead to an unauthorized access to the LICENSE KEY or an unauthorized use of the LICENSE KEY, it is the LICENSEE's duty to inform RIPS immediately.
+
+1A.5 The SOFTWARE may only be used for its intended purpose of analyzing security vulnerabilities of web applications that are coded in PHP programming language with the goal of improving security of such web applications.
+
+1A.6 The SOFTWARE may not be used (i) in any way that is unlawful, illegal, fraudulent or harmful; or (ii) in connection with any unlawful, illegal, fraudulent or harmful purpose or activity.
+
+1A.7 LICENSEE agrees to not use the SOFTWARE for the purpose of competing with RIPS in any manner.
+
+1A.8 The LICENSEE is obliged to promptly install all UPDATES released by RIPS.
+
+1A.9 During the continuance of this EULA, RIPS will, at its sole discretion and for as long and for such hours as it may decide, provide service and support via email only and only during RIPS' normal business hours.
+
+1B. License and Support (SAAS-VERSION):
+1B.1 Subject to the terms hereof, the SAAS-VERSION of the SOFTWARE is provided on a temporary-use, non-exclusive, non-assignable, and non-transferable basis, to be used via RIPS' Application Programming Interface ("API") or any standard web browser by the LICENSEE only.
+
+1B.2 Detailed specifications, requirements and limitations of the SOFTWARE are specified in the description of the license type YOU chose to acquire ("LICENSE TYPE DESCRIPTION"). The LICENSE TYPE DESCRIPTION is deemed to be part of this EULA.
+
+1B.3 The SAAS-VERSION of the SOFTWARE permits the LICENSEE to use the SOFTWARE solely as (i) API-based application service; or (ii) via any standard web browser. The maximum number of scans per month, and the maximum number of allowed applications to be analyzed by the SOFTWARE, and the particular period of time ("TERM") in which the SOFTWARE can be used, (i) are specified (a) in the LICENSE TYPE DESCRIPTION, and (b) in the invoice which accompanies the SOFTWARE and which is deemed to be part of this EULA, and (ii) can be looked up in LICENSEE's account which has been created in the course of LICENSEE's ordering process ("ACCOUNT"). The LICENSEE acknowledges that the SOFTWARE may contain technical functionality to stop operations after the TERM has expired, the LICENSEE fails to pay due fees, or violates this EULA in any other way.
+
+1B.4 The SAAS-VERSION of the SOFTWARE is granted to the LICENSEE only and as such does not permit to sell, lend, assign, lease, or transfer in any other way this EULA, the related ACCOUNT or the API-Key ("API-KEY"). LICENSEE is not allowed to offer the operation of the SOFTWARE and / or the ACCOUNT and / or the API-KEY to third parties in any form. This includes, but is not limited to, providing a mechanism enabling third parties to submit application scans. Any transfer or use in violation of this provision is prohibited and may cause the license to be terminated with no refund of any fees paid. It is the LICENSEE's sole responsibility to protect the ACCOUNT and the API-KEY from (i) any unauthorized access; or (ii) any unauthorized use. If -for any reason- the LICENSEE gets aware of (i) any unauthorized ACCOUNT / API-KEY access; or (ii) any unauthorized ACCOUNT / API-KEY use; or (iii) any incidents that my lead to an unauthorized ACCOUNT / API-KEY access or an unauthorized ACCOUNT / API-KEY use, it is the LICENSEE's duty to inform RIPS immediately.
+
+1B.5 The SOFTWARE may only be used for its intended purpose of analyzing security vulnerabilities of web applications that are coded in PHP programming language with the goal of improving security of such web applications.
+
+1B.6 The SOFTWARE may not be used (i) in any way that is unlawful, illegal, fraudulent or harmful; or (ii) in connection with any unlawful, illegal, fraudulent or harmful purpose or activity.
+
+1B.7 LICENSEE agrees to not use the SOFTWARE for the purpose of competing with RIPS in any manner.
+
+1B.8 During the continuance of this EULA, RIPS will, at its sole discretion and for as long and for such hours as it may decide, provide service and support via email only and only during RIPS' normal business hours.
+
+2. Copyright and Open Source:
+2.1 The SOFTWARE under this AGREEMENT is exclusive property of RIPS. RIPS owns the title, copyright, and other intellectual property rights in the SOFTWARE, which is protected by copyright and other intellectual property laws and treaties. This AGREEMENT does not grant the LICENSEE any ownership right or title to, or interest in the SOFTWARE, or any part thereof. RIPS retains all such rights, title, and interest. The SOFTWARE is licensed, not sold.
+
+2.2 The LICENSEE agrees to not alter or delete any copyright notice that is included with the SOFTWARE.
+
+2.3 The SOFTWARE may contain Open-Source components, which, in addition to these terms, are subject to and governed by the particular license terms and conditions of these components.
+
+2.4 The Licensee agrees to not attempt to modify, disassemble, reverse compile, or reverse engineer the SOFTWARE, except, and only to the limited extent, that is expressively permitted by applicable law.
+
+3. Confidentiality, Data protection:
+3.1 The SOFTWARE includes significant elements, including its algorithms, logic, know-how, techniques, ideas, and design that RIPS has maintained as confidential information, which constitute trade secrets of RIPS, and may be protected under copyright and other intellectual property laws and treaties. The LICENSEE shall not disclose any of this proprietary information to third parties during and after the TERM of this AGREEMENT.
+
+3.2 RIPS stores all data that is necessary for the purposes of this EULA (e.g. company name, user email, user ID, LICENSE KEY, TERM, analysis timestamp; (ON-PREMISE-VERSION only) login timestamp, number of lines of code analyzed, number of files analyzed, number of functions analyzed, number of issues detected, application name, application version, analysis settings; (SAAS-VERSION only). Except as provided otherwise herein, RIPS may use such data for the purposes of this EULA only.
+
+3.3 All data as described in section 3.2 above will be protected by RIPS against unauthorized disclosure using the same degree of care used to protect RIPS' own information of like importance, but in any case using no less than a reasonable degree of care.
+
+3.4 RIPS may disclose any data stored or information received in the context of this EULA if this is required by law or any regulatory or government authority and then only after a notice to LICENSEE, provided there is reasonable time and possibility to send such notice.
+
+3.5 LICENSEE has no right to inspect RIPS' premises, SOFTWARE or related data systems.
+
+4. Limited Warranty; Limitation on Remedies:
+4.1 Licensor warrants (i) that the SAAS-VERSION of the SOFTWARE covered by this EULA will operate substantially in accordance with the specifications found in LICENSE TYPE DESCRIPTION; and (ii) that the ON-PREMISE-VERSION of the SOFTWARE covered by this EULA will, for a period of ninety (90) days following its installation, operate substantially in accordance with the specifications found in the LICENSE TYPE DESCRIPTION. As the SOFTWARE is used to detect security vulnerabilities and, due to the nature of such security vulnerabilities, no guarantee can be given for (i) the quantity or quality of the information contained in the generated analysis, (ii) the determinations of the security vulnerability of analyzed web application code. IF IMPLIED WARRANTIES MAY NOT BE DISCLAIMED UNDER APPLICABLE LAW, THEN THE LIMITATIONS ABOVE MAY NOT APPLY TO YOU.
+
+4.2 YOUR sole and exclusive remedy for the breach of the limited warranty as set forth in section 5 of this EULA shall be, at Licensor's option, either a refund for the price that the LICENSEE paid for the use of the SOFTWARE (less any taxes, shipping fees, etc.), or the repair or replacement of any defective SOFTWARE.
+
+5. Disclaimer of Warranty:
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY EXCEPT AS PROVIDED IN SECTION 4 OF THIS EULA (LIMITED WARRANTY). TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, LICENSOR DISCLAIMS ALL OTHER WARRANTIES, EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, OF FITNESS FOR A PARTICULAR PURPOSE, OF NON-INFRINGEMENT, OF PERFORMANCE, AND OF COMPLETENESS OF RESULTS.
+
+6. Warning; Limitation of Damages:
+6.1 LICENSOR -AGAIN- EXPLICITLY INFORMS AND WARNS YOU AS THE LICENSEE THAT THE PURPOSE OF THE SOFTWARE IS TO ANALYZE WEB APPLICATIONS CODED IN PHP PROGRAMMING LANGUAGE IN ORDER TO DETECT SECURITY VULNERABILITIES AND PROVIDE INFORMATION TO HELP REMEDIATING SUCH VULNERABILITIES. FOR CORRECT AND SOUND ANALYSIS IT IS NECESSARY TO RECOGNIZE ALL POSSIBLE FUNCTIONALITY THAT IS CONTAINED IN A WEB APPLICATION'S SOURCE CODE. HENCE, NO EFFORTS ARE TAKEN BY THE SOFTWARE TO PROVIDE PROTECTION AGAINST A MAXIMUM POWER CONSUMPTION OF THE SOFTWARE WHICH CAN CAUSE (I) SERVER INSTABILITIES, (II) SERVER CRASHES, AND (III) LOSS OF DATA (COLLECTIVELY "UNAVOIDABLE EFFECTS"). SUCH UNAVOIDABLE EFFECTS ARE EXPLICITLY ADMITTED AND EXPECTED. IT IS THE LICENSEE'S SOLE RESPONSIBILITY AND DUTY TO (i) ALWAYS BACKUP ALL OF THE WEBSITE'S AND WEB APPLICATION'S DATA IN DUE TIME AND MANNER; AND (ii), WITH THE EXCEPTION OF RIPS' SAAS-VERSION-SERVER, ASSURE, TAKE CARE, AND GUARANTEE THAT THESE UNAVOIDABLE EFFECTS DO NOT HARM ANY COMPUTER SYSTEMS, NETWORK INFRASTRUCTURE OR DATA WHATSOEVER. IF YOU CANNOT OR WILL NOT GUARANTEE (i) THAT YOU ALWAYS BACKUP ALL OF THE WEBSITE'S AND WEB APPLICATION'S DATA IN DUE TIME AND MANNER; AND (ii) THAT, WITH THE EXCEPTION OF RIPS' SAAS-VERSION-SERVER, THESE UNAVOIDABLE EFFECTS DO NOT HARM ANY COMPUTER SYSTEMS, NETWORK INFRASTRUCTURE OR DATA WHATSOEVER, DO NOT USE THE SOFTWARE.
+
+6.2 LICENSOR EXPLICITLY INFORMS AND WARNS YOU AS THE LICENSEE THAT THE SOFTWARE'S ANALYSIS NATURALLY MAY RESULT IN INCOMPLETE OR INCORRECT RESULTS AS WELL AS INCORRECT DETERMINATIONS OF THE SECURITY VULNERABILITY OF ANALYZED WEB APPLICATION CODE. THUS, IF YOU CANNOT OR WILL NOT ACCEPT THAT THE SOFTWARE'S ANALYSIS CAN CAUSE FALSE NEGATIVES OR FALSE POSITIVES, DO NOT USE THE SOFTWARE.
+
+6.3 TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, LICENSOR SHALL NOT BE LIABLE FOR ANY SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OR BUSINESS, LOSS OF PROFITS, BUSINESS INTERRUPTION, ETC.) ARISING FROM LICENSEE'S USE, OR THE INABILITY OF LICENSEE TO USE, THE SOFTWARE, EVEN IF LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE EXPLICIT WARNINGS OF SECTION 6.1 ABOVE AND SECTION 6.2 ABOVE ARE EXPLICITLY INCORPORATED INTO THIS LIMITATION OF DAMAGES.
+
+7. Limitation of Liability:
+IN ANY CASE, LICENSOR'S ENTIRE AGGREGATED CUMULATIVE LIABILITY TO LICENSEE FOR ALL LOSSES, DAMAGES, CLAIMS, SUITS OR OTHER ASPECTS OF ANY KIND WHATSOEVER ARISING OUT OF, RESULTING FROM OR RELATED TO THE PERFORMANCE OR BREACH OF THIS EULA SHALL BE - TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW - LIMITED TO THE AMOUNT ACTUALLY PAID BY YOU FOR THE USE OF SOFTWARE WITHIN A PERIOD OF THREE (3) MONTH PRIOR TO THE EVENT CAUSING SUCH LIABILITY. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OR LIMITATION OF LIABILITY, SO THE ABOVE LIMITATION MAY NOT APPLY TO YOU.
+
+8. Force Majeure:
+RIPS shall not be liable for any default or delay in the performance of its obligations hereunder if and to the extent such default or delay is caused, directly or indirectly, by fire, flood, earthquake, elements of nature or acts of God, or any other similar cause beyond the reasonable control of RIPS ("FORCE MAJEURE"). RIPS shall use its reasonable efforts to minimize the duration and consequences of any delay or failure of performance resulting from a FORCE MAJEURE event.
+
+9. Limitation on Exports:
+YOU agree (i) that YOU will not export or re-export, directly or indirectly, the SOFTWARE, or materials provided related to or generated with the SOFTWARE, outside of the jurisdiction where YOU permissibly first installed the SOFTWARE; and (ii) that YOU will not make the SOFTWARE accessible to an end-user of concern or in support of a prohibited end-use, except in full compliance with all German, European, United States and other applicable laws and regulations.
+
+10. Term and Termination:
+10.1 The initial term of the AGREEMENT shall commence upon receipt of payment as invoiced to LICENSEE and shall remain in effect for as long as specified (i) in the LICENSE TYPE DESCRIPTION and (ii) in the invoice which accompanies the SOFTWARE and which is deemed to be part of this EULA ("INITIAL TERM") with an option to renew for as long and often as, at LICENSOR's sole discretion, specified by LICENSOR ("RENEWAL TERM"), exercisable by LICENSEE within thirty (30) days prior to the expiration of the INITIAL TERM or subsequent RENEWAL TERM (each RENEWAL TERM and together with the INITIAL TERM, the "TERM").
+
+10.2 Either Party may terminate this AGREEMENT immediately by giving written notice to the other party for any material breach of this AGREEMENT that is not cured within thirty (30) days after written notice of such breach.
+
+10.3 In the event of termination or expiration of this AGREEMENT (collectively "TERMINATION") YOU must stop using the SOFTWARE and destroy any and all of YOUR ON-PREMISE-VERSIONS of the SOFTWARE, all accompanying materials, and all copies thereof. Except as otherwise expressly stated, any provisions of this AGREEMENT that by their nature would survive will survive the TERMINATION and continue according to their terms. TERMINATION shall not relieve either party of obligations incurred prior thereto.
+
+10.4 One (1) month after TERMINATION, RIPS will delete LICENSEE's ACCOUNT. LICENSEE will then no longer be able to access the ACCOUNT or any of its associated data.
+
+11. Applicable Law; Place of Jurisdiction; Place of Performance:
+11.1 ALL CLAIMS UNDER ANY THORY OF LIABILITY IN ANY WAY TO THIS EULA AND ALL OTHER CLAIMS OR ASPECTS WHATSOEVER ARISING OUT OF OR IN CONNECTION WITH THIS EULA SHALL BE GOVERNED BY THE LAWS OF THE JURISDICTION YOU PERMISSIBLY FIRST INSTALLED THE SOFTWARE, WITHOUT REGARD TO ITS PRINCIPLES OF CONFLICTS OF LAW.
+
+11.2 TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE PARTIES AGREE TO SUBMIT ANY CASE OR CONTROVERSY ARISING OUT OF OR IN CONNECTION WITH THE PROVISIONS OF THIS EULA TO SETTLEMENT PROCEEDINGS UNDER THE ICC ADR RULES. IF THE DISPUTE HAS NOT BEEN SETTLED PURSUANT TO THE SAID RULES WITHIN FORTY-FIVE (45) DAYS FOLLOWING THE FILING OF A REQUEST FOR ADR OR WITHIN SUCH OTHER PERIOD AS THE PARTIES MAY AGREE IN WRITING, SUCH DISPUTE SHALL THEREAFTER BE FINALLY SETTLED UNDER THE RULES OF ARBITRATION OF THE INTERNATIONAL CHAMBER OF COMMERCE BY ONE ARBITRATOR APPOINTED IN ACCORDANCE WITH THE SAID RULES OF ARBITRATION. THE SEAT, VENUE OR LEGAL PLACE OF THE ARBITRATION SHALL BE BERLIN, GERMANY. THE LANGUAGE TO BE USED IN THE MEDIATION AND IN THE ARBITRATION SHALL BE GERMAN.
+
+11.3 TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE PLACE OF PERFORMANCE IS LICENSOR'S REGISTERED BUSINESS ADDRESS BY THE TIME OF PERFORMANCE.
+
+12. Withholding Tax; Miscellaneous; Severability:
+12.1 All payments that YOU make shall be net of any applicable withholding tax or other similar levies (collectively "WITHHOLDING TAXES"). Any and all WITHHOLDING TAXES required by applicable law shall be paid by YOU.
+
+12.2 Except as expressly stated herein, there are no other agreements, understandings between the parties, or obligations on the part of LICENSOR related to the SOFTWARE.
+
+12.3 If any provision of this AGREEMENT is declared invalid or unenforceable, such provision shall be -to the maximum extent permitted by applicable law - deemed modified to the extent necessary and possible to render it valid and enforceable. In any event, the unenforceability or invalidity of any provision shall -to the maximum extent permitted by applicable law - not affect any other provision of this EULA, and this EULA shall continue in full force and effect, and be construed and enforced, as if such provision had not been included, or had been modified as above provided, as the case may be.
+
+YOU ACKNOWLEDGE THAT YOU HAVE READ THIS AGREEMENT AND UNDERSTAND IT, AND THAT BY INSTALLING OR USING THE SOFTWARE YOU AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS. YOU FURTHER AGREE THAT THIS AGREEMENT IS THE COMPLETE AND EXCLUSIVE STATEMENT OF THE RIGHTS AND LIABILITIES OF THE PARTIES. AS IT PERTAINS TO THE SOFTWARE THIS AGREEMENT SUPERSEDES ALL PRIOR ORAL AGREEMENTS, PROPOSALS OR UNDERSTANDINGS, AND ANY OTHER COMMUNICATIONS BETWEEN YOU AND LICENSOR RELATING TO THE SOFTWARE OR THIS AGREEMENT.
+
+-------- END OF EULA FOR RIPS SOFTWARE --------

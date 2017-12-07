@@ -1,0 +1,14 @@
+{
+    "name": "rips/zend-server",
+    "description": "A RIPS plugin for Zend Server",
+    "authors": [
+        {
+            "name": "Martin Bednorz",
+            "email": "mbednorz@ripstech.com",
+            "homepage": "https://www.ripstech.com"
+        }
+    ],
+    "require": {
+        "rips/connector": "~2.9"
+    }
+}

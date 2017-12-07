@@ -1,0 +1,16 @@
+"responseData":{
+    "ui_url": <?php echo json_encode($ui_url); ?>,
+    "scans": [
+    <?php foreach ($scans as $i => $scan): ?>
+        {
+            "id":<?php echo json_encode($scan['id']); ?>,
+            "version":<?php echo json_encode($scan['version']); ?>,
+            "application":<?php echo json_encode($scan['application']); ?>,
+            "percent":<?php echo json_encode($scan['percent']); ?>,
+            "severity_distributions":<?php echo json_encode($scan['severity_distributions']); ?>,
+            "issue_types":<?php echo json_encode($scan['issue_types']); ?>
+        }
+        <?php if ($i < count($scans) - 1) echo ','; ?>
+    <?php endforeach; ?>
+    ]
+}
