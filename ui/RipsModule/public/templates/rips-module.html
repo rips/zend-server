@@ -175,7 +175,7 @@
 </div>
 
 <div class="tab-section" ng-if="ui.activeTab == 'NewFromDocRoot'">
-    <div ng-if="!scanFromDocRoot.initialLoadFinished" class="tab-section" style="height: 50px; line-height: 50px;">
+    <div ng-if="scanFromDocRoot.loading" class="tab-section" style="height: 50px; line-height: 50px;">
         <div class="settings-form-wrapper">
             <i class="fa fa-spin fa-spinner"></i> Loading...
         </div>
@@ -188,10 +188,10 @@
             <table class="zend-form-table">
                 <tr>
                     <td colspan="2">
-                        <span ng-show="!scan.loading">
+                        <span ng-show="!scanFromDocRoot.loadingrefresh">
                             <a class="btn btn-default" ng-click="scanFromDocRoot.load()">Refresh</a>
                         </span>
-                        <span ng-show="scan.loading">
+                        <span ng-show="scanFromDocRoot.loadingrefresh">
                             <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Refresh</a>
                         </span>
                     </td>
@@ -221,17 +221,21 @@
 						</table>
                     </td>
                 </tr>
-                <tr ng-if="scanFromDocRoot.selectedDocRoot != 0">
-                    
-                </tr>
                 <tr>
+                	<td colspan="2" ng-if="!scanFromDocRoot.hasScanSpec && scanFromDocRoot.selectedDocRoot != 0">
+                		<div class="settings-form-wrapper">
+            				<i class="fa fa-spin fa-spinner"></i> Loading...
+        				</div>
+                	</td>
+                </tr>
+                <tr ng-if="scanFromDocRoot.hasScanSpec">
                 	<td colspan="2">
                 		<label for="spanSpec">Files and directories to be scanned:</label><br />
                     	<textarea id="spanSpec" ng-model="scanFromDocRoot.scanSpec"></textarea>
                     </td>
                 </tr>
-                <tr>
-                <td><label for="ripsApps">Parent Application in RIPS</label></td>
+                <tr ng-if="scanFromDocRoot.hasScanSpec">
+                	<td><label for="ripsApps">Parent Application in RIPS</label></td>
                     <td>
                         <select id="ripsApps" ng-model="scanFromDocRoot.selectedRipsApp">
                             <option value="0">-- please select --</option>
@@ -239,13 +243,13 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
+                <tr ng-if="scanFromDocRoot.hasScanSpec">
                     <td><label for="version">Version Name</label></td>
                     <td>
                         <input type="text" ng-model="scanFromDocRoot.version" id="version" />
                     </td>
                 </tr>
-                <tr>
+                <tr ng-if="scanFromDocRoot.hasScanSpec">
                     <td colspan="2">
                         <span ng-show="!scanFromDocRoot.isSaving">
                             <a class="btn btn-blue" ng-click="scanFromDocRoot.save()" ng-disabled="!scanFromDocRoot.initialLoadFinished">Start Scan</a>

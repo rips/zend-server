@@ -113,11 +113,8 @@
         
         $scope.$watch('scanFromDocRoot.selectedDocRoot', function(newValue, oldValue) {
             if (newValue == 0) return;
-            //debugger;
-            //$scope.scanFromDocRoot.initialLoadFinished = false;
             
-            console.log(newValue, oldValue);
-            
+            $scope.scanFromDocRoot.hasScanSpec = false;
             $scope.scanFromDocRoot.loadScanSpec();
         }, true);
 
@@ -127,13 +124,17 @@
             selectedDocRoot: '0',
             scanSpec: '',
             version: new Date().toISOString(),
+            loading: false,
 
             // loading
             initialLoadFinished: false,
-            loading: false,
+            loadingrefresh: false,
+            
             load: function() {
                 var errorMessage = 'Error loading applications';
-                $scope.scanFromDocRoot.loading = true;
+                $scope.scanFromDocRoot.loadingrefresh = true;
+                $scope.scanFromDocRoot.selectedDocRoot = 0;
+                $scope.scanFromDocRoot.hasScanSpec = false;
 
                 WebAPI({
                     method: 'GET',
@@ -154,12 +155,13 @@
                     document.fireEvent('toastAlert', {message: errorMessage});
                 }).finally(function() {
                     $scope.scanFromDocRoot.initialLoadFinished = true;
-                    $scope.scanFromDocRoot.loading = false;
+                    $scope.scanFromDocRoot.loadingrefresh = false;
                 });
             },
 
             hasScanSpec: false,
             loadScanSpec: function() {
+                
                 // collect the data
                 var data = {
                     'vhost_id': $scope.scanFromDocRoot.selectedDocRoot
@@ -184,7 +186,7 @@
                     document.fireEvent('toastAlert', {message: errorMessage});
                 }).finally(function() {
                     $scope.scanFromDocRoot.isSaving = false;
-                    $scope.scanFromDocRoot.hasScanSpec = false;
+                    $scope.scanFromDocRoot.hasScanSpec = true;
                 });
             },
             
