@@ -282,10 +282,8 @@ class WebApiController extends WebAPIActionController {
         
         return new WebApiResponseContainer([
             'success' => '1',
-            'myselectedtraceid' => $params['vhost_id'],
             'vendorRemoved' => $vendorRemoved,
-            'scanSpec' => $scanSpec,
-            'docsToScan' => join(', ', $content) //var_export($vhostsResult, true)
+            'scanSpec' => $scanSpec
         ]);
     }
     
@@ -340,9 +338,6 @@ class WebApiController extends WebAPIActionController {
             'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip'
         );
         
-        error_log(getCfgVar('zend.temp_dir') ."\n", 3, '/tmp/x');
-        error_log('rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip' . "\n\n", 3, '/tmp/x');
-        
         // Create a zip archive from code tracing information
         try {
             $zip = new \ZipArchive();
@@ -351,13 +346,9 @@ class WebApiController extends WebAPIActionController {
             foreach ($filesToScan as $fileToScan) {
                 $fileToScan = $parent . '/' . ltrim($fileToScan, '/');
                 
-                error_log("File: " . $fileToScan ."\n", 3, '/tmp/x');
-                
                 $zip->addFile($parent . '/' . $fileToScan, $fileToScan);
                 
-                
                 if (is_dir($fileToScan)) {
-                    error_log("is dir " ."\n", 3, '/tmp/x');
                     $files = new \RecursiveIteratorIterator(
                         new \RecursiveDirectoryIterator($fileToScan),
                         \RecursiveIteratorIterator::LEAVES_ONLY
@@ -371,15 +362,13 @@ class WebApiController extends WebAPIActionController {
                             // Get real and relative path for current file
                             $filePath = $file->getRealPath();
                             $relativePath = substr($filePath, strlen($fileToScan) + 1);
-                            
-                            error_log("adding $filePath as $relativePath \n", 3, '/tmp/x');
+
                             // Add current file to archive
                             $zip->addFile($filePath, basename($fileToScan) . '/' . $relativePath);
                         }
                     }
                 }
                 else {
-                    error_log("is file " ."\n", 3, '/tmp/x');
                     $zip->addFile($fileToScan, basename($fileToScan));
                 }
             }
@@ -389,8 +378,6 @@ class WebApiController extends WebAPIActionController {
             throw new \Exception("Creating zip archive from ZendServer application source code failed: {$e->getMessage()}");
         }
         
-        error_log("zip: " . var_export($zip, true) . '/' . $file ."\n\n", 3, '/tmp/x');
-        
         // Call the upload and start scan API endpoints
         $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
         $settings = $settings->getSettings();
@@ -398,14 +385,14 @@ class WebApiController extends WebAPIActionController {
         $api = new API($settings['username'], $settings['password'], ['base_uri' => $settings['api_url']]);
         
         try {
-            #$upload = $api->uploads->upload($params['rips_id'], basename($path), file_get_contents($path));
-            #$api->scans->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
+            $upload = $api->applications->uploads()->create($params['rips_id'], basename($path), $path);
+            $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
         }
         
         // Remove the temporary archive (was already uploaded)
-        //unlink($path);
+        unlink($path);
         
         return new WebApiResponseContainer([
             'success' => '1',
