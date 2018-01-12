@@ -202,22 +202,22 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                    	<table class="zgrid" ng-if="scans.initialLoadFinished">
+                    	<table class="zgrid rips-scan-docroot" ng-if="scans.initialLoadFinished">
             				<tr>
-				                <th style="width: 20px; text-align: center;"></th>
-				                <th style="padding: 0 5px 0 5px">Document Root</th>
+				                <th></th>
+				                <th>Document Root</th>
 				                <th>Hostname</th>
-				                <th style="width: 150px;">Config File</th>
+				                <th>Config File</th>
 	                		</tr>
             				<tr ng-repeat="item in scanFromDocRoot.docRootSet">
-					       		<td>
+					       		<td class="cb">
 					       			<input type="radio" name="docRoot"
 					             	ng-model="scanFromDocRoot.selectedDocRoot"
 					             	ng-value="item.id">
 					             </td>
-					             <td>{{item.doc_root}}</td>
-					             <td>{{item.name}}</td>
-					             <td>{{item.config_file}}</td>
+					             <td class="docroot">{{item.doc_root}}</td>
+					             <td class="name">{{item.name}}</td>
+					             <td class="configfile">{{item.config_file}}</td>
 							</tr>
 						</table>
                     </td>

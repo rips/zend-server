@@ -172,3 +172,13 @@ table.issues td.type {
 .test-badge .glyphicons-remove-sign {
     color: #ff0000;
 }
+
+table.rips-scan-docroot td.cb {
+	width: 20px;
+	text-align: center;
+	padding-left: 10px;
+}
+
+table.rips-scan-docroot td.docroot, table.rips-scan-docroot td.name, table.rips-scan-docroot td.configfile {
+	padding: 5px 10px 5px 10px;
+}
