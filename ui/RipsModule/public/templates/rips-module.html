@@ -198,7 +198,6 @@
                 </tr>
                 <tr>
                     <td><label for="docRootSet">Doc Roots available to scan</label></td>
-                    <td></td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -226,8 +225,9 @@
                     
                 </tr>
                 <tr>
-                	<td>
-                    	<textarea ng-model="scanFromDocRoot.scanSpec"></textarea>
+                	<td colspan="2">
+                		<label for="spanSpec">Files and directories to be scanned:</label><br />
+                    	<textarea id="spanSpec" ng-model="scanFromDocRoot.scanSpec"></textarea>
                     </td>
                 </tr>
                 <tr>

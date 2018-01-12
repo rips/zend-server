@@ -182,3 +182,8 @@ table.rips-scan-docroot td.cb {
 table.rips-scan-docroot td.docroot, table.rips-scan-docroot td.name, table.rips-scan-docroot td.configfile {
 	padding: 5px 10px 5px 10px;
 }
+
+#spanSpec {
+	width: 600px;
+	height: 150px;
+}
