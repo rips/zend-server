@@ -253,22 +253,15 @@ class WebApiController extends WebAPIActionController {
         
         $this->validateMandatoryParameters($params, ['vhost_id']);
         
-        $vhostMapper = $this->getLocator()->get('Vhost\Mapper\Vhost');
-        
         try {
-            $vhostsResult = $vhostMapper->getVhosts();
+            $vhostMapper = $this->getLocator()->get('Vhost\Mapper\Vhost');
             $vhost = $vhostMapper->getVhostById($params['vhost_id']);
-
-            
         } catch (\Exception $ex) {
             throw new \Exception(_t('Could not retrieve vhost information'), \Exception::INTERNAL_SERVER_ERROR, $ex);
         }
         
-        $docRoot = rtrim($vhost->getDocRoot(),"/");
-        $docRoot = (is_link($docRoot)) ? readlink($docRoot) : $docRoot;
-        
-        $parent = dirname($docRoot);
-        $pathToGuess = (is_link($parent)) ? readlink($parent) : $parent;
+        $docRoot = $this->getLocator()->get(\RipsModule\Service\DocRoot::class);
+        $pathToGuess = $docRoot->getByVhost($vhost);
         
         $content = scandir($pathToGuess);
         

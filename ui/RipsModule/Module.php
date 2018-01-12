@@ -77,6 +77,9 @@ class Module {
      */
     public function getServiceConfig() {
         return [
+            'invokables' => [
+                \RipsModule\Service\DocRoot::class => \RipsModule\Service\DocRoot::class
+            ],
             'factories' => [
                 'RipsModule\Model\Settings' => function(ServiceManager $sm) {
                     $tableGateway = new TableGateway('RIPS_SETTINGS', $sm->get(Connector::DB_CONTEXT_RIPS));
@@ -90,7 +93,7 @@ class Module {
                     $connector = new Connector();
                     $adapter = $connector->createDbAdapter(Connector::DB_CONTEXT_RIPS);
                     return $adapter;
-                },
+                }
             ],
         ];
     }
