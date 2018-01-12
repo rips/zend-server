@@ -1,6 +1,6 @@
 <div id="bread-wrp" class="page-description">
 	<div id="bread">
-		<h1>RIPS Code Analysis</h1>
+		<h1>Code Analysis</h1>
 
 		<div class="bread-info-btn">
 			<i class="glyphicons glyphicons-info-sign"></i>
@@ -24,6 +24,7 @@
     <ul>
         <li ng-click="ui.activateTab('Scans');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'Scans')}">Scans</li>
         <li ng-click="ui.activateTab('New');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'New')}">New Scan</li>
+        <li ng-click="ui.activateTab('NewFromDocRoot');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'NewFromDocRoot')}">New Scan from Document Root</li>
         <li ng-click="ui.activateTab('Settings');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'Settings')}">Settings</li>
     </ul>
 </nav>
@@ -164,6 +165,92 @@
                             <a class="btn btn-blue" ng-click="scan.save()" ng-disabled="!scan.initialLoadFinished">Start Scan</a>
                         </span>
                         <span ng-show="scan.isSaving">
+                            <a class="btn btn-blue" disabled><i class="fa fa-spinner fa-spin"></i> Start Scan</a>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+<div class="tab-section" ng-if="ui.activeTab == 'NewFromDocRoot'">
+    <div ng-if="!scanFromDocRoot.initialLoadFinished" class="tab-section" style="height: 50px; line-height: 50px;">
+        <div class="settings-form-wrapper">
+            <i class="fa fa-spin fa-spinner"></i> Loading...
+        </div>
+    </div>
+
+    <div ng-if="scanFromDocRoot.initialLoadFinished" class="settings-wrapper">
+        <h2>Settings</h2>
+
+        <form ng-submit="scanFromDocRoot.save()">
+            <table class="zend-form-table">
+                <tr>
+                    <td colspan="2">
+                        <span ng-show="!scan.loading">
+                            <a class="btn btn-default" ng-click="scanFromDocRoot.load()">Refresh</a>
+                        </span>
+                        <span ng-show="scan.loading">
+                            <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Refresh</a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="docRootSet">Doc Roots available to scan</label></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                    	<table class="zgrid" ng-if="scans.initialLoadFinished">
+            				<tr>
+				                <th style="width: 20px; text-align: center;"></th>
+				                <th style="padding: 0 5px 0 5px">Document Root</th>
+				                <th>Hostname</th>
+				                <th style="width: 150px;">Config File</th>
+	                		</tr>
+            				<tr ng-repeat="item in scanFromDocRoot.docRootSet">
+					       		<td>
+					       			<input type="radio" name="docRoot"
+					             	ng-model="scanFromDocRoot.selectedDocRoot"
+					             	ng-value="item.id">
+					             </td>
+					             <td>{{item.doc_root}}</td>
+					             <td>{{item.name}}</td>
+					             <td>{{item.config_file}}</td>
+							</tr>
+						</table>
+                    </td>
+                </tr>
+                <tr ng-if="scanFromDocRoot.selectedDocRoot != 0">
+                    
+                </tr>
+                <tr>
+                	<td>
+                    	<textarea ng-model="scanFromDocRoot.scanSpec"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                <td><label for="ripsApps">Parent Application in RIPS</label></td>
+                    <td>
+                        <select id="ripsApps" ng-model="scanFromDocRoot.selectedRipsApp">
+                            <option value="0">-- please select --</option>
+                            <option ng-repeat="option in scanFromDocRoot.ripsApps" value="{{option.id}}">{{option.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="version">Version Name</label></td>
+                    <td>
+                        <input type="text" ng-model="scanFromDocRoot.version" id="version" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span ng-show="!scanFromDocRoot.isSaving">
+                            <a class="btn btn-blue" ng-click="scanFromDocRoot.save()" ng-disabled="!scanFromDocRoot.initialLoadFinished">Start Scan</a>
+                        </span>
+                        <span ng-show="scanFromDocRoot.isSaving">
                             <a class="btn btn-blue" disabled><i class="fa fa-spinner fa-spin"></i> Start Scan</a>
                         </span>
                     </td>

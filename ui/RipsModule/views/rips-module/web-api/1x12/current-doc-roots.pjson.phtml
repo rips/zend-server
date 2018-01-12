@@ -1,0 +1,22 @@
+"responseData":{
+    "docRootSet": [
+    <?php foreach ($vhosts as $i => $vhost): ?>
+        {
+            "id":<?php echo json_encode($vhost->getId()); ?>,
+            "name":<?php echo json_encode($vhost->getName()); ?>,
+            "doc_root":<?php echo json_encode($vhost->getDocRoot()); ?>,
+            "config_file":<?php echo json_encode($vhost->getConfigFile()); ?>
+        }
+        <?php if ($i < count($vhosts) - 1) echo ','; ?>
+    <?php endforeach; ?>
+    ],
+    "ripsApps": [
+    <?php foreach ($ripsApps as $i => $app): ?>
+        {
+            "id":<?php echo json_encode($app['id']); ?>,
+            "name":<?php echo json_encode($app['name']); ?>
+        }
+        <?php if ($i < count($ripsApps) - 1) echo ','; ?>
+    <?php endforeach; ?>
+    ]
+}
