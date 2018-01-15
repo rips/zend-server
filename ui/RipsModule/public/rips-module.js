@@ -55,15 +55,11 @@
                         $scope.scan.ripsApps = res.data.responseData.ripsApps || [];
                     } else {
                         document.fireEvent('toastAlert', {message: errorMessage});
-                        console.log('TEST 1');
-                        console.log(res);
                     }
                 }, function(res) {
                     if (typeof(res.data.errorData.errorMessage) != 'undefined') {
                         errorMessage = res.data.errorData.errorMessage;
                     }
-                    console.log('TEST 2');
-                    console.log(res);
                     document.fireEvent('toastAlert', {message: errorMessage});
                 }).finally(function() {
                     $scope.scan.initialLoadFinished = true;
@@ -145,13 +141,11 @@
                         $scope.scanFromDocRoot.ripsApps = res.data.responseData.ripsApps || [];
                     } else {
                         document.fireEvent('toastAlert', {message: errorMessage});
-                        console.log(res);
                     }
                 }, function(res) {
                     if (typeof(res.data.errorData.errorMessage) != 'undefined') {
                         errorMessage = res.data.errorData.errorMessage;
                     }
-                    console.log(res);
                     document.fireEvent('toastAlert', {message: errorMessage});
                 }).finally(function() {
                     $scope.scanFromDocRoot.initialLoadFinished = true;
@@ -175,7 +169,6 @@
                     url: '/ZendServer/Api/ripsScanSpec',
                     data: data
                 }).then(function(res) {
-                    console.log(res.data.responseData);
                     $scope.scanFromDocRoot.scanSpec = res.data.responseData.scanSpec;
                     $scope.scanFromDocRoot.hasScanSpec = true;
                 }, function(res) {
@@ -465,7 +458,6 @@
                             loadScanDetailsCharts($scope.scanDetails.stats, $scope.scanDetails.types);
                         });
                     } else {
-                        console.log(res);
                         document.fireEvent('toastAlert', {message: errorMessage});
                     }
                 }, function(res) {
@@ -515,9 +507,6 @@
             columns.push([entry.type.name, entry.amount]);
             colors[entry.type.name] = '#' + entry.type.color;
         });
-
-        console.log(columns);
-        console.log(colors);
 
         c3.generate({
             bindto: '#type-chart',
