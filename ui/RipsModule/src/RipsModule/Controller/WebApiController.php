@@ -313,51 +313,8 @@ class WebApiController extends WebAPIActionController {
         
         $filesToScan = explode("\n", $params['scan_spec']);
         
-        // Create temporary zip file with a unique name
-        $path = FS::createPath(
-            getCfgVar('zend.temp_dir'),
-            'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip'
-        );
-        
-        // Create a zip archive from code tracing information
-        try {
-            $zip = new \ZipArchive();
-            $zip->open($path, \ZipArchive::CREATE);
-            
-            foreach ($filesToScan as $fileToScan) {
-                $fileToScan = $parent . '/' . ltrim($fileToScan, '/');
-                
-                $zip->addFile($parent . '/' . $fileToScan, $fileToScan);
-                
-                if (is_dir($fileToScan)) {
-                    $files = new \RecursiveIteratorIterator(
-                        new \RecursiveDirectoryIterator($fileToScan),
-                        \RecursiveIteratorIterator::LEAVES_ONLY
-                    );
-                    
-                    foreach ($files as $name => $file)
-                    {
-                        // Skip directories (they would be added automatically)
-                        if (!$file->isDir())
-                        {
-                            // Get real and relative path for current file
-                            $filePath = $file->getRealPath();
-                            $relativePath = substr($filePath, strlen($fileToScan) + 1);
-
-                            // Add current file to archive
-                            $zip->addFile($filePath, basename($fileToScan) . '/' . $relativePath);
-                        }
-                    }
-                }
-                else {
-                    $zip->addFile($fileToScan, basename($fileToScan));
-                }
-            }
-            
-            $zip->close();
-        } catch (\Exception $e) {
-            throw new \Exception("Creating zip archive from ZendServer application source code failed: {$e->getMessage()}");
-        }
+        $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
+        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create($parent, $filesToScan, $zipName);
         
         // Call the upload and start scan API endpoints
         $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
@@ -366,14 +323,14 @@ class WebApiController extends WebAPIActionController {
         $api = new API($settings['username'], $settings['password'], ['base_uri' => $settings['api_url']]);
         
         try {
-            $upload = $api->applications->uploads()->create($params['rips_id'], basename($path), $path);
+            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
             $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
         }
         
         // Remove the temporary archive (was already uploaded)
-        unlink($path);
+        unlink($zipPath);
         
         return new WebApiResponseContainer([
             'success' => '1',
