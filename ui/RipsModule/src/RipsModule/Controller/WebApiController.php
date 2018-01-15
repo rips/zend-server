@@ -263,20 +263,13 @@ class WebApiController extends WebAPIActionController {
         $docRoot = $this->getLocator()->get(\RipsModule\Service\DocRoot::class);
         $pathToGuess = $docRoot->getByVhost($vhost);
         
-        $content = scandir($pathToGuess);
-        
-        $vendorRemoved = false;
-        $doNotScan = ['.', '..', 'docs', '.dockerignore', '.git', '.gitignore', 'composer.json', 'composer.lock', 'README.md', 'vendor'];
-        
-        if (in_array('vendor', $content))  $vendorRemoved = true;
-        $content = array_diff($content, $doNotScan);
-        
-        $scanSpec = join("\n", $content);
+        $scanSpec = $this->getLocator()->get(\RipsModule\Service\ScanSpec::class);
+        $content = $scanSpec->getByPath($pathToGuess);
         
         return new WebApiResponseContainer([
             'success' => '1',
-            'vendorRemoved' => $vendorRemoved,
-            'scanSpec' => $scanSpec
+            'vendorRemoved' => $scanSpec->isVendorRemoved(),
+            'scanSpec' => join("\n", $content)
         ]);
     }
     

@@ -78,7 +78,8 @@ class Module {
     public function getServiceConfig() {
         return [
             'invokables' => [
-                \RipsModule\Service\DocRoot::class => \RipsModule\Service\DocRoot::class
+                \RipsModule\Service\DocRoot::class => \RipsModule\Service\DocRoot::class,
+                \RipsModule\Service\ScanSpec::class => \RipsModule\Service\ScanSpec::class
             ],
             'factories' => [
                 'RipsModule\Model\Settings' => function(ServiceManager $sm) {
