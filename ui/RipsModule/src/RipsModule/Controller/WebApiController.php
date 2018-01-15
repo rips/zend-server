@@ -304,17 +304,12 @@ class WebApiController extends WebAPIActionController {
         try {
             $vhostsResult = $vhostMapper->getVhosts();
             $vhost = $vhostMapper->getVhostById($params['vhost_id']);
-            
-            
         } catch (\Exception $ex) {
             throw new \Exception(_t('Could not retrieve vhost information'), \Exception::INTERNAL_SERVER_ERROR, $ex);
         }
         
-        $docRoot = rtrim($vhost->getDocRoot(),"/");
-        $docRoot = (is_link($docRoot)) ? readlink($docRoot) : $docRoot;
-        
-        $parent = dirname($docRoot);
-        $parent = (is_link($parent)) ? readlink($parent) : $parent;
+        $docRoot = $this->getLocator()->get(\RipsModule\Service\DocRoot::class);
+        $parent = $docRoot->getByVhost($vhost);
         
         $filesToScan = explode("\n", $params['scan_spec']);
         
