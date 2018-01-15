@@ -181,40 +181,8 @@ class WebApiController extends WebAPIActionController {
             throw new \Exception('Data missing');
         }
 
-        // Create temporary zip file with a unique name
-        $path = FS::createPath(
-            getCfgVar('zend.temp_dir'),
-            'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip'
-        );
-
-        // Create a zip archive from the ZendServer application source code
-        try {
-            $zip = new \ZipArchive();
-            $zip->open($path, \ZipArchive::CREATE);
-
-            $directoryIterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($params['zend_path']));
-            foreach ($directoryIterator as $file) {
-                if ($file->isDir()) {
-                    continue;
-                }
-
-                $extensions = explode('.', basename($file->getPathname()));
-                if (!in_array(end($extensions), ['php', 'php3', 'php4', 'php5', 'phtml', 'inc'])) {
-                    continue;
-                }
-
-                $localFilename = str_replace($params['zend_path'], '', $file->getPathname());
-                if ($localFilename[0] === '/') {
-                    $localFilename = substr($localFilename, 1);
-                }
-
-                $zip->addFile($file->getPathname(), $localFilename);
-            }
-
-            $zip->close();
-        } catch (\Exception $e) {
-            throw new \Exception("Creating zip archive from ZendServer application source code failed: {$e->getMessage()}");
-        }
+        $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
+        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(dirname($params['zend_path']), [basename($params['zend_path'])], $zipName);
 
         // Call the upload and start scan API endpoints
         $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
@@ -223,14 +191,14 @@ class WebApiController extends WebAPIActionController {
         $api = new API($settings['username'], $settings['password'], ['base_uri' => $settings['api_url']]);
 
         try {
-            $upload = $api->applications->uploads()->create($params['rips_id'], basename($path), $path);
+            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
             $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
         }
 
         // Remove the temporary archive (was already uploaded)
-        unlink($path);
+        unlink($zipPath);
 
         return new WebApiResponseContainer([
             'success' => '1'
@@ -334,7 +302,7 @@ class WebApiController extends WebAPIActionController {
         
         return new WebApiResponseContainer([
             'success' => '1',
-            'path' => $path
+            'path' => $zipPath
         ]);
     }
 
