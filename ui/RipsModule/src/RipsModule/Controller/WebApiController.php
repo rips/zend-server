@@ -322,6 +322,8 @@ class WebApiController extends WebAPIActionController {
             throw new \Exception($e->getCode() . ': Getting issues failed: ' . $e->getMessage());
         }
 
+        $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
+
         return new WebApiResponseContainer([
             'issues' => $issues,
             'ui_url' => $settings['ui_url'],
@@ -372,6 +374,8 @@ class WebApiController extends WebAPIActionController {
         usort($typeData, function($a, $b) {
             return $b['type']->severity - $a['type']->severity;
         });
+
+        $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
 
         return new WebApiResponseContainer([
             'scan' => $scan,
