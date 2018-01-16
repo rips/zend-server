@@ -4,12 +4,14 @@ namespace RipsModule;
 
 use RipsModule\Db\Connector;
 use RipsModule\Model\Settings;
+use RIPS\Connector\API;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use ZendServer\Log\Log;
+use RipsModule\Service\RipsApp;
 
 class Module {
 
@@ -77,6 +79,11 @@ class Module {
      */
     public function getServiceConfig() {
         return [
+            'invokables' => [
+                \RipsModule\Service\DocRoot::class => \RipsModule\Service\DocRoot::class,
+                \RipsModule\Service\ScanSpec::class => \RipsModule\Service\ScanSpec::class,
+                \RipsModule\Service\Zip::class => \RipsModule\Service\Zip::class
+            ],
             'factories' => [
                 'RipsModule\Model\Settings' => function(ServiceManager $sm) {
                     $tableGateway = new TableGateway('RIPS_SETTINGS', $sm->get(Connector::DB_CONTEXT_RIPS));
@@ -91,6 +98,28 @@ class Module {
                     $adapter = $connector->createDbAdapter(Connector::DB_CONTEXT_RIPS);
                     return $adapter;
                 },
+                'RIPS\Api' => function(ServiceManager $sm) {
+                    // Get RIPS applications
+                    $settings = $sm->get('RipsModule\Model\Settings')->getSettings();
+                    
+                    if (empty($settings['username']) || empty($settings['password'])) {
+                        throw new \InvalidArgumentException("Username and password must not be empty");
+                    }
+                    
+                    $api = new API(
+                        $settings['username'],
+                        $settings['password'],
+                        ['base_uri' => $settings['api_url']]
+                    );
+                    
+                    return $api;
+                },
+                \RipsModule\Service\RipsApp::class => function(ServiceManager $sm) {
+                    // Get RIPS applications
+                    $api = $sm->get('RIPS\Api');
+                    
+                    return new \RipsModule\Service\RipsApp($api);
+                }
             ],
         ];
     }
