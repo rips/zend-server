@@ -106,10 +106,10 @@
                 });
             },
         };
-        
+
         $scope.$watch('scanFromDocRoot.selectedDocRoot', function(newValue, oldValue) {
             if (newValue == 0) return;
-            
+
             $scope.scanFromDocRoot.hasScanSpec = false;
             $scope.scanFromDocRoot.loadScanSpec();
         }, true);
@@ -125,7 +125,7 @@
             // loading
             initialLoadFinished: false,
             loadingrefresh: false,
-            
+
             load: function() {
                 var errorMessage = 'Error loading applications';
                 $scope.scanFromDocRoot.loadingrefresh = true;
@@ -155,12 +155,12 @@
 
             hasScanSpec: false,
             loadScanSpec: function() {
-                
+
                 // collect the data
                 var data = {
                     'vhost_id': $scope.scanFromDocRoot.selectedDocRoot
                 };
-                
+
                 // default error message
                 var errorMessage = 'Error starting scan';
 
@@ -182,7 +182,7 @@
                     $scope.scanFromDocRoot.hasScanSpec = true;
                 });
             },
-            
+
             // saving
             isSaving: false,
             save: function() {
@@ -223,7 +223,7 @@
                 });
             },
         };
-        
+
 		$scope.settings = {
 		    username: '',
 		    password: '',
