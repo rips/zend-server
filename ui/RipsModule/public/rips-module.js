@@ -55,15 +55,11 @@
                         $scope.scan.ripsApps = res.data.responseData.ripsApps || [];
                     } else {
                         document.fireEvent('toastAlert', {message: errorMessage});
-                        console.log('TEST 1');
-                        console.log(res);
                     }
                 }, function(res) {
                     if (typeof(res.data.errorData.errorMessage) != 'undefined') {
                         errorMessage = res.data.errorData.errorMessage;
                     }
-                    console.log('TEST 2');
-                    console.log(res);
                     document.fireEvent('toastAlert', {message: errorMessage});
                 }).finally(function() {
                     $scope.scan.initialLoadFinished = true;
@@ -110,7 +106,124 @@
                 });
             },
         };
+        
+        $scope.$watch('scanFromDocRoot.selectedDocRoot', function(newValue, oldValue) {
+            if (newValue == 0) return;
+            
+            $scope.scanFromDocRoot.hasScanSpec = false;
+            $scope.scanFromDocRoot.loadScanSpec();
+        }, true);
 
+        $scope.scanFromDocRoot = {
+            ripsApps: [],
+            selectedRipsApp: '0',
+            selectedDocRoot: '0',
+            scanSpec: '',
+            version: new Date().toISOString(),
+            loading: false,
+
+            // loading
+            initialLoadFinished: false,
+            loadingrefresh: false,
+            
+            load: function() {
+                var errorMessage = 'Error loading applications';
+                $scope.scanFromDocRoot.loadingrefresh = true;
+                $scope.scanFromDocRoot.selectedDocRoot = 0;
+                $scope.scanFromDocRoot.hasScanSpec = false;
+
+                WebAPI({
+                    method: 'GET',
+                    url: '/ZendServer/Api/ripsCurrentDocRoots'
+                }).then(function(res) {
+                    if (res && res.data && res.data.responseData && res.data.responseData.docRootSet && res.data.responseData.ripsApps) {
+                        $scope.scanFromDocRoot.docRootSet = res.data.responseData.docRootSet || [];
+                        $scope.scanFromDocRoot.ripsApps = res.data.responseData.ripsApps || [];
+                    } else {
+                        document.fireEvent('toastAlert', {message: errorMessage});
+                    }
+                }, function(res) {
+                    if (typeof(res.data.errorData.errorMessage) != 'undefined') {
+                        errorMessage = res.data.errorData.errorMessage;
+                    }
+                    document.fireEvent('toastAlert', {message: errorMessage});
+                }).finally(function() {
+                    $scope.scanFromDocRoot.initialLoadFinished = true;
+                    $scope.scanFromDocRoot.loadingrefresh = false;
+                });
+            },
+
+            hasScanSpec: false,
+            loadScanSpec: function() {
+                
+                // collect the data
+                var data = {
+                    'vhost_id': $scope.scanFromDocRoot.selectedDocRoot
+                };
+                
+                // default error message
+                var errorMessage = 'Error starting scan';
+
+                WebAPI({
+                    method: 'POST',
+                    url: '/ZendServer/Api/ripsScanSpec',
+                    data: data
+                }).then(function(res) {
+                    $scope.scanFromDocRoot.scanSpec = res.data.responseData.scanSpec;
+                    $scope.scanFromDocRoot.hasScanSpec = true;
+                }, function(res) {
+                    if (typeof(res.data.errorData.errorMessage) != 'undefined') {
+                        errorMessage = res.data.errorData.errorMessage;
+                    }
+
+                    document.fireEvent('toastAlert', {message: errorMessage});
+                }).finally(function() {
+                    $scope.scanFromDocRoot.isSaving = false;
+                    $scope.scanFromDocRoot.hasScanSpec = true;
+                });
+            },
+            
+            // saving
+            isSaving: false,
+            save: function() {
+                // collect the data
+                var data = {
+                    'rips_id': $scope.scanFromDocRoot.selectedRipsApp,
+                    'scan_spec': $scope.scanFromDocRoot.scanSpec,
+                    'vhost_id': $scope.scanFromDocRoot.selectedDocRoot,
+                    'version': $scope.scanFromDocRoot.version,
+                };
+
+                // default error message
+                var errorMessage = 'Error starting scan';
+
+                $scope.scanFromDocRoot.isSaving = true;
+                WebAPI({
+                    method: 'POST',
+                    url: '/ZendServer/Api/ripsScanDocRoot',
+                    data: data
+                }).then(function(res) {
+                    if (res && res.data && res.data.responseData  && res.data.responseData.success == '1') {
+                        document.fireEvent('toastNotification', {message: 'Scan started'});
+                        setTimeout(function() {
+                            $scope.scanFromDocRoot.load();
+                            $scope.ui.activateTab('Scans');
+                        }, 1000);
+                    } else {
+                        document.fireEvent('toastAlert', {message: errorMessage});
+                    }
+                }, function(res) {
+                    if (typeof(res.data.errorData.errorMessage) != 'undefined') {
+                        errorMessage = res.data.errorData.errorMessage;
+                    }
+
+                    document.fireEvent('toastAlert', {message: errorMessage});
+                }).finally(function() {
+                    $scope.scanFromDocRoot.isSaving = false;
+                });
+            },
+        };
+        
 		$scope.settings = {
 		    username: '',
 		    password: '',
@@ -345,7 +458,6 @@
                             loadScanDetailsCharts($scope.scanDetails.stats, $scope.scanDetails.types);
                         });
                     } else {
-                        console.log(res);
                         document.fireEvent('toastAlert', {message: errorMessage});
                     }
                 }, function(res) {
@@ -362,6 +474,7 @@
         };
 
         $scope.scan.load();
+        $scope.scanFromDocRoot.load();
         $scope.settings.load();
         $scope.scans.load();
     }]);

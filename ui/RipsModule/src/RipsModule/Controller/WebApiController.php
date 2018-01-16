@@ -2,11 +2,8 @@
 
 namespace RipsModule\Controller;
 
-use RIPS\Connector\API;
 use ZendServer\Mvc\Controller\WebAPIActionController;
-use ZendServer\Log\Log;
 use WebAPI\View\WebApiResponseContainer;
-use ZendServer\FS\FS;
 
 class WebApiController extends WebAPIActionController {
     /**
@@ -73,29 +70,8 @@ class WebApiController extends WebAPIActionController {
                 'path' => $app->getInstallPath(),
             ];
         }
-
-        // Get RIPS applications
-        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
-        $settings = $settings->getSettings();
-
-        $ripsApps = [];
-
-        if (!empty($settings['username']) && !empty($settings['username'])) {
-            $api = new API($settings['username'], $settings['password'], ['base_uri' => $settings['api_url']]);
-
-            try {
-                $apps = $api->applications->getAll();
-            } catch (\Exception $e) {
-                throw new \Exception($e->getCode() . ': Getting applications failed: ' . $e->getMessage());
-            }
-
-            foreach ($apps as $app) {
-                $ripsApps[] = [
-                    'id' => $app->id,
-                    'name' => $app->name,
-                ];
-            }
-        }
+        
+        $ripsApps = $this->getServiceLocator()->get('RipsModule\Service\RipsApp')->getAll();
 
         return [
             'zendApps' => $zendApps,
@@ -103,6 +79,36 @@ class WebApiController extends WebAPIActionController {
         ];
     }
 
+    /**
+     * Get current Traces from Zend Server and RIPS applications
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function currentDocRootsAction() {
+        $this->isMethodGet();
+        $vhostMapper = $this->getLocator()->get('Vhost\Mapper\Vhost');
+
+        try {
+            $vhostsResult = $vhostMapper->getVhosts();
+            $vhosts = array();
+
+            foreach ($vhostsResult as $vhost) {
+                $vhosts[] = $vhost;
+            }
+
+        } catch (\Exception $ex) {
+            throw new \Exception(_t('Could not retrieve vhost information'), \Exception::INTERNAL_SERVER_ERROR, $ex);
+        }
+        
+        $ripsApps = $this->getServiceLocator()->get('RipsModule\Service\RipsApp')->getAll();
+        
+        return [
+            'vhosts' => $vhosts,
+            'ripsApps' => $ripsApps,
+        ];
+    }
+    
     /**
      * Start a new scan
      *
@@ -126,59 +132,120 @@ class WebApiController extends WebAPIActionController {
             throw new \Exception('Data missing');
         }
 
-        // Create temporary zip file with a unique name
-        $path = FS::createPath(
-            getCfgVar('zend.temp_dir'),
-            'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip'
-        );
+        $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
+        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(dirname($params['zend_path']), [basename($params['zend_path'])], $zipName);
 
-        // Create a zip archive from the ZendServer application source code
-        try {
-            $zip = new \ZipArchive();
-            $zip->open($path, \ZipArchive::CREATE);
-
-            $directoryIterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($params['zend_path']));
-            foreach ($directoryIterator as $file) {
-                if ($file->isDir()) {
-                    continue;
-                }
-
-                $extensions = explode('.', basename($file->getPathname()));
-                if (!in_array(end($extensions), ['php', 'php3', 'php4', 'php5', 'phtml', 'inc'])) {
-                    continue;
-                }
-
-                $localFilename = str_replace($params['zend_path'], '', $file->getPathname());
-                if ($localFilename[0] === '/') {
-                    $localFilename = substr($localFilename, 1);
-                }
-
-                $zip->addFile($file->getPathname(), $localFilename);
-            }
-
-            $zip->close();
-        } catch (\Exception $e) {
-            throw new \Exception("Creating zip archive from ZendServer application source code failed: {$e->getMessage()}");
-        }
-
-        // Call the upload and start scan API endpoints
-        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
-        $settings = $settings->getSettings();
-
-        $api = new API($settings['username'], $settings['password'], ['base_uri' => $settings['api_url']]);
+        $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
-            $upload = $api->applications->uploads()->create($params['rips_id'], basename($path), $path);
+            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
             $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
         }
 
         // Remove the temporary archive (was already uploaded)
-        unlink($path);
+        unlink($zipPath);
 
         return new WebApiResponseContainer([
             'success' => '1'
+        ]);
+    }
+    
+    /**
+     * Start a new scan based on a Code Trace
+     *
+     * @return WebApiResponseContainer
+     * @throws \Exception
+     */
+    public function scanSpecAction() {
+        $this->isMethodPost();
+        
+        // Check the given parameters
+        $params = $this->getParameters([
+            'vhost_id' => ''
+        ]);
+        
+        $this->validateMandatoryParameters($params, ['vhost_id']);
+        
+        try {
+            $vhostMapper = $this->getLocator()->get('Vhost\Mapper\Vhost');
+            $vhost = $vhostMapper->getVhostById($params['vhost_id']);
+        } catch (\Exception $ex) {
+            throw new \Exception(_t('Could not retrieve vhost information'), \Exception::INTERNAL_SERVER_ERROR, $ex);
+        }
+        
+        $docRoot = $this->getLocator()->get(\RipsModule\Service\DocRoot::class);
+        $pathToGuess = $docRoot->getByVhost($vhost);
+        
+        $scanSpec = $this->getLocator()->get(\RipsModule\Service\ScanSpec::class);
+        $content = $scanSpec->getByPath($pathToGuess);
+        
+        return new WebApiResponseContainer([
+            'success' => '1',
+            'vendorRemoved' => $scanSpec->isVendorRemoved(),
+            'scanSpec' => join("\n", $content)
+        ]);
+    }
+    
+    /**
+     * Start a new scan based on a Code Trace
+     *
+     * @return WebApiResponseContainer
+     * @throws \Exception
+     */
+    public function scanDocRootAction() {
+        $this->isMethodPost();
+        
+        // Check the given parameters
+        $params = $this->getParameters([
+            'rips_id' => 0,
+            'scan_spec' => '',
+            'vhost_id' => '',
+            'version' => '',
+        ]);
+        
+        $this->validateMandatoryParameters($params, ['rips_id', 'scan_spec', 'vhost_id', 'version']);
+        $params['rips_id'] = (int)$params['rips_id'];
+        
+        if ($params['rips_id'] === 0 || empty($params['scan_spec']) || empty($params['vhost_id']) || empty($params['version'])) {
+            throw new \Exception('Data missing');
+        }
+        
+        $this->validateMandatoryParameters($params, ['vhost_id']);
+        
+        $vhostMapper = $this->getLocator()->get('Vhost\Mapper\Vhost');
+        
+        try {
+            $vhostsResult = $vhostMapper->getVhosts();
+            $vhost = $vhostMapper->getVhostById($params['vhost_id']);
+        } catch (\Exception $ex) {
+            throw new \Exception(_t('Could not retrieve vhost information'), \Exception::INTERNAL_SERVER_ERROR, $ex);
+        }
+        
+        $docRoot = $this->getLocator()->get(\RipsModule\Service\DocRoot::class);
+        $parent = $docRoot->getByVhost($vhost);
+        
+        $filesToScan = explode("\n", $params['scan_spec']);
+        
+        $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
+        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create($parent, $filesToScan, $zipName);
+        
+        $api = $this->getLocator()->get('\RIPS\Api');
+        
+        try {
+            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
+            $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
+        }
+        
+        // Remove the temporary archive (was already uploaded)
+        unlink($zipPath);
+        
+        return new WebApiResponseContainer([
+            'success' => '1',
+            'path' => $zipPath
         ]);
     }
 
@@ -192,19 +259,16 @@ class WebApiController extends WebAPIActionController {
         $this->isMethodGet();
 
         $scans = [];
-        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
-        $settings = $settings->getSettings();
+        
+        $api = $this->getLocator()->get('\RIPS\Api');
 
-        if (!empty($settings['username']) && !empty($settings['password'])) {
-            $api = new API($settings['username'], $settings['password'], ['base_uri' => $settings['api_url']]);
-
-            try {
-                $scans = $api->applications->scans()->getAll(null, ['showScanSeverityDistributions' => 1, 'orderBy[id]' => 'desc', 'limit' => 20]);
-            } catch (\Exception $e) {
-                throw new \Exception($e->getCode() . ': Getting scans failed: ' . $e->getMessage());
-            }
+        try {
+            $scans = $api->applications->scans()->getAll(null, ['showScanSeverityDistributions' => 1, 'orderBy[id]' => 'desc', 'limit' => 20]);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getCode() . ': Getting scans failed: ' . $e->getMessage());
         }
-
+        
+        $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
         return new WebApiResponseContainer([
             'scans' => $scans,
             'ui_url' => $settings['ui_url'],
@@ -227,10 +291,7 @@ class WebApiController extends WebAPIActionController {
 
         $this->validateMandatoryParameters($params, ['application_id', 'scan_id']);
 
-        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
-        $settings = $settings->getSettings();
-
-        $api = new API($settings['username'], $settings['password'], ['base_uri' => $settings['api_url']]);
+        $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
             $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], ['minimal' => 1]);
@@ -260,10 +321,7 @@ class WebApiController extends WebAPIActionController {
 
         $this->validateMandatoryParameters($params, array('application_id', 'scan_id'));
 
-        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
-        $settings = $settings->getSettings();
-
-        $api = new API($settings['username'], $settings['password'], ['base_uri' => $settings['api_url']]);
+        $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
             $scan = $api->applications->scans()->getById($params['application_id'], $params['scan_id']);
