@@ -271,7 +271,7 @@ class WebApiController extends WebAPIActionController {
         $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
         return new WebApiResponseContainer([
             'scans' => $scans,
-            'ui_url' => $settings['ui_url'],
+            'ui_url' => $settings['ui_url']
         ]);
     }
 
@@ -299,9 +299,10 @@ class WebApiController extends WebAPIActionController {
             throw new \Exception($e->getCode() . ': Getting issues failed: ' . $e->getMessage());
         }
 
+        $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
         return new WebApiResponseContainer([
             'issues' => $issues,
-            'ui_url' => $settings['ui_url'],
+            'ui_url' => $settings['ui_url']
         ]);
     }
 
@@ -350,6 +351,7 @@ class WebApiController extends WebAPIActionController {
             return $b['type']->severity - $a['type']->severity;
         });
 
+        $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
         return new WebApiResponseContainer([
             'scan' => $scan,
             'stats' => $stats,
