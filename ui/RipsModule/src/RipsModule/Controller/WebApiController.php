@@ -351,6 +351,7 @@ class WebApiController extends WebAPIActionController {
             return $b['type']->severity - $a['type']->severity;
         });
 
+        $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
         return new WebApiResponseContainer([
             'scan' => $scan,
             'stats' => $stats,
