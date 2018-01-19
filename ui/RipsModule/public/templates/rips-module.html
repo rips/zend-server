@@ -22,10 +22,26 @@
 
 <nav id="new-tabs-container">
     <ul>
-        <li ng-click="ui.activateTab('Scans');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'Scans')}">Scans</li>
-        <li ng-click="ui.activateTab('New');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'New')}">New Scan</li>
-        <li ng-click="ui.activateTab('NewFromDocRoot');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'NewFromDocRoot')}">New Scan from Document Root</li>
-        <li ng-click="ui.activateTab('Settings');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'Settings')}">Settings</li>
+        <li ng-click="ui.activateTab('Scans');"
+            class="diagonal-tab"
+            ng-class="{'active': (ui.activeTab == 'Scans')}">
+            Scans
+        </li>
+        <li ng-click="ui.activateTab('New');"
+            class="diagonal-tab"
+            ng-class="{'active': (ui.activeTab == 'New')}">
+            New Scan
+        </li>
+        <li ng-click="ui.activateTab('NewFromDocRoot');"
+            class="diagonal-tab"
+            ng-class="{'active': (ui.activeTab == 'NewFromDocRoot')}">
+            New Scan from Document Root
+        </li>
+        <li ng-click="ui.activateTab('Settings');"
+            class="diagonal-tab"
+            ng-class="{'active': (ui.activeTab == 'Settings')}">
+            Connection Settings
+        </li>
     </ul>
 </nav>
 
@@ -121,7 +137,7 @@
     </div>
 
     <div ng-if="scan.initialLoadFinished" class="settings-wrapper">
-        <h2>Settings</h2>
+        <h2>New Scan</h2>
 
         <form ng-submit="scan.save()">
             <table class="zend-form-table">
@@ -182,7 +198,7 @@
     </div>
 
     <div ng-if="scanFromDocRoot.initialLoadFinished" class="settings-wrapper">
-        <h2>Settings</h2>
+        <h2>New Scan from Document Root</h2>
 
         <form ng-submit="scanFromDocRoot.save()">
             <table class="zend-form-table">
@@ -272,7 +288,7 @@
     </div>
 
     <div ng-if="settings.initialLoadFinished" class="settings-wrapper">
-        <h2>Settings</h2>
+        <h2>Connection Settings</h2>
 
         <form ng-submit="settings.save()">
             <table class="zend-form-table">
