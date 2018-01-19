@@ -161,7 +161,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="zendApps">Deployed Application to scan</label></td>
+                    <td>
+                        <label for="zendApps">Deployed Application to Scan</label>
+                        <p class="help">Select an application that is deployed with Zend Server for code analysis.</p>
+                    </td>
                     <td>
                         <select id="zendApps" ng-model="scan.selectedZendApp" ng-if="scan.zendApps && scan.zendApps.length > 0">
                             <option value="0">-- please select --</option>
@@ -176,7 +179,14 @@
                     </td>
                 </tr>
                 <tr ng-if="scan.selectedZendApp != 0">
-                    <td><label for="ripsApps">Parent Application in RIPS</label></td>
+                    <td>
+                        <label for="ripsApps">Parent Application in RIPS</label>
+                        <p class="help">
+                            Select a previously scanned application in RIPS to perform a rescan of a new version, or
+                            create a new application.<br/>
+                            <a href="https://kb.ripstech.com/display/DOC/Scans" target="_blank">More Information</a>
+                        </p>
+                    </td>
                     <td>
                         <select id="ripsApps" ng-model="scan.selectedRipsApp">
                             <option value="0">-- create new application --</option>
@@ -185,13 +195,19 @@
                     </td>
                 </tr>
                 <tr ng-if="scan.selectedZendApp != 0 && scan.selectedRipsApp == 0">
-                    <td><label for="newAppName">New Application Name</label></td>
+                    <td>
+                        <label for="newAppName">New Application Name</label>
+                        <p class="help">The name of your application that will be used for analysis in RIPS.</p>
+                    </td>
                     <td>
                         <input type="text" ng-model="scan.newAppName" id="newAppName" />
                     </td>
                 </tr>
                 <tr ng-if="scan.selectedZendApp != 0">
-                    <td><label for="version">Version Name</label></td>
+                    <td>
+                        <label for="version">Version Name</label>
+                        <p class="help">The version identifier of your application, e.g. v1.5.</p>
+                    </td>
                     <td>
                         <input type="text" ng-model="scan.version" id="version" />
                     </td>
@@ -272,7 +288,14 @@
                     </td>
                 </tr>
                 <tr ng-if="scanFromDocRoot.hasScanSpec">
-                	<td><label for="ripsApps">Parent Application in RIPS</label></td>
+                	<td>
+                        <label for="ripsApps">Parent Application in RIPS</label>
+                        <p class="help">
+                            Select a previously scanned application in RIPS to perform a rescan of a new version, or
+                            create a new application.<br/>
+                            <a href="https://kb.ripstech.com/display/DOC/Scans" target="_blank">More Information</a>
+                        </p>
+                    </td>
                     <td>
                         <select id="ripsApps" ng-model="scanFromDocRoot.selectedRipsApp">
                             <option value="0">-- create new application --</option>
@@ -281,13 +304,19 @@
                     </td>
                 </tr>
                 <tr ng-if="scanFromDocRoot.hasScanSpec && scanFromDocRoot.selectedRipsApp == 0">
-                        <td><label for="newAppNameDoc">New Application Name</label></td>
-                        <td>
-                            <input type="text" ng-model="scanFromDocRoot.newAppName" id="newAppNameDoc" />
-                        </td>
-                    </tr>
+                    <td>
+                        <label for="newAppNameDoc">New Application Name</label>
+                        <p class="help">The name of your application that will be used for analysis in RIPS.</p>
+                    </td>
+                    <td>
+                        <input type="text" ng-model="scanFromDocRoot.newAppName" id="newAppNameDoc" />
+                    </td>
+                </tr>
                 <tr ng-if="scanFromDocRoot.hasScanSpec">
-                    <td><label for="version">Version Name</label></td>
+                    <td>
+                        <label for="version">Version Name</label>
+                        <p class="help">The version identifier of your application, e.g. v1.5.</p>
+                    </td>
                     <td>
                         <input type="text" ng-model="scanFromDocRoot.version" id="version" />
                     </td>
@@ -320,13 +349,25 @@
         <form ng-submit="settings.save()">
             <table class="zend-form-table">
                 <tr>
-                    <td><label for="api_url">API URL</label></td>
+                    <td>
+                        <label for="api_url">API URL</label>
+                        <p class="help">
+                            The URL of your RIPS API, e.g. http://192.168.0.1:8080/.<br/>
+                            <a href="https://kb.ripstech.com/display/DOC/Installing+RIPS" target="_blank">More Information</a>
+                        </p>
+                    </td>
                     <td>
                         <input type="text" ng-model="settings.api_url" id="api_url" />
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="ui_url">UI URL</label></td>
+                    <td>
+                        <label for="ui_url">UI URL</label>
+                        <p class="help">
+                            The base URL to your RIPS User Interface that is used to reference issues, e.g.
+                            http://192.168.0.1/.
+                        </p>
+                    </td>
                     <td>
                         <input type="text" ng-model="settings.ui_url" id="ui_url" />
                     </td>
