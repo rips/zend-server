@@ -17,6 +17,11 @@ table.severities td {
     font-weight: bold;
 }
 
+table p.help {
+    color: #909090;
+    margin: 4px 0 2px 0;
+}
+
 table.zgrid {
     table-layout: auto;
 }
