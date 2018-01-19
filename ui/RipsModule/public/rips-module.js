@@ -4,6 +4,7 @@
         ['$scope', '$timeout', 'WebAPI', '$rootScope', 'ngDialog', function ($scope, $timeout, WebAPI, $rootScope, ngDialog) {
 
 		$scope.viewScanDetails = function(scan) {
+            $scope.issues.initialLoadFinished = false;
 		    $scope.scanDetails.load(scan.application.id, scan.id);
 			$scope.currentScan = scan;
 			ngDialog.open({
@@ -38,6 +39,7 @@
             selectedRipsApp: '0',
             selectedZendApp: '0',
             version: new Date().toISOString(),
+            newAppName: '',
 
             // loading
             initialLoadFinished: false,
@@ -75,7 +77,13 @@
                     'rips_id': $scope.scan.selectedRipsApp,
                     'zend_path': $scope.scan.selectedZendApp,
                     'version': $scope.scan.version,
+                    'new_app_name': $scope.scan.newAppName,
                 };
+
+                if (data['rips_id'] === '0' && (!data['new_app_name'] || data['new_app_name'] === '')) {
+                    document.fireEvent('toastAlert', {message: 'Please enter an application name.'});
+                    return;
+                }
 
                 // default error message
                 var errorMessage = 'Error starting scan';
@@ -107,6 +115,21 @@
             },
         };
 
+        // Listen to changes to the selected zend app to update the value of the new application name
+        // (if it is empty)
+        $scope.$watch('scan.selectedZendApp', function(newValue, oldValue) {
+            if ($scope.scan.newAppName === '' && newValue != 0) {
+                // Search for the path
+                var zendApp = $scope.scan.zendApps.find(function (element) {
+                    return element.path === newValue;
+                });
+
+                if (zendApp) {
+                    $scope.scan.newAppName = zendApp.name;
+                }
+            }
+        });
+
         $scope.$watch('scanFromDocRoot.selectedDocRoot', function(newValue, oldValue) {
             if (newValue == 0) return;
 
@@ -121,6 +144,7 @@
             scanSpec: '',
             version: new Date().toISOString(),
             loading: false,
+            newAppName: '',
 
             // loading
             initialLoadFinished: false,
@@ -192,7 +216,13 @@
                     'scan_spec': $scope.scanFromDocRoot.scanSpec,
                     'vhost_id': $scope.scanFromDocRoot.selectedDocRoot,
                     'version': $scope.scanFromDocRoot.version,
+                    'new_app_name': $scope.scanFromDocRoot.newAppName,
                 };
+
+                if (data['rips_id'] === '0' && (!data['new_app_name'] || data['new_app_name'] === '')) {
+                    document.fireEvent('toastAlert', {message: 'Please enter an application name.'});
+                    return;
+                }
 
                 // default error message
                 var errorMessage = 'Error starting scan';
@@ -206,7 +236,7 @@
                     if (res && res.data && res.data.responseData  && res.data.responseData.success == '1') {
                         document.fireEvent('toastNotification', {message: 'Scan started'});
                         setTimeout(function() {
-                            $scope.scanFromDocRoot.load();
+                            $scope.scans.load();
                             $scope.ui.activateTab('Scans');
                         }, 1000);
                     } else {
@@ -333,25 +363,29 @@
 
 		$scope.scans = {
 		    scans: [],
-		    ui_url: '',
+            ui_url: '',
+            moreScansAvailable: false,
 
             // loading
             initialLoadFinished: false,
             loading: false,
-            load: function() {
+            load: function(append = false) {
                 var errorMessage = 'Error loading scans';
                 $scope.scans.loading = true;
+                var offset = append ? $scope.scans.scans.length : 0;
+                var limit = !append ? ($scope.scans.scans.length !== 0 ? $scope.scans.scans.length : 20) : 20;
 
                 WebAPI({
                     method: 'GET',
-                    url: '/ZendServer/Api/ripsScans'
+                    url: `/ZendServer/Api/ripsScans?offset=${offset}&limit=${limit}`,
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.scans && res.data.responseData.ui_url) {
-                        $scope.scans.scans = res.data.responseData.scans || [];
+                        var scans = res.data.responseData.scans || [];
+                        $scope.scans.moreScansAvailable = scans.length % 20 === 0;
                         $scope.scans.ui_url = res.data.responseData.ui_url || '';
 
                         var reload = false;
-                        $scope.scans.scans.forEach(function(scan) {
+                        scans.forEach(function(scan) {
                             // Reload after a few seconds if there are still running scans
                             if (scan.percent < 100) {
                                 reload = true;
@@ -369,6 +403,12 @@
                                 scan['risk'] = 100;
                             }
                         });
+
+                        if (append) {
+                            $scope.scans.scans = $scope.scans.scans.concat(scans);
+                        } else {
+                            $scope.scans.scans = scans;
+                        }
 
                         if (reload) {
                             setTimeout(function() {
@@ -393,26 +433,32 @@
 
 		$scope.issues = {
 		    issues: [],
-		    ui_url: '',
+            ui_url: '',
+            moreIssuesAvailable: false,
 
             // loading
             initialLoadFinished: false,
             loading: false,
-            load: function(applicationId, scanId) {
+            load: function(applicationId, scanId, append = false) {
                 var errorMessage = 'Error loading issues';
                 $scope.issues.loading = true;
+                var offset = append ? $scope.issues.issues.length : 0;
+                var limit = !append ? ($scope.issues.issues.length !== 0 ? $scope.issues.issues.length : 200) : 200;
 
                 WebAPI({
                     method: 'GET',
-                    url: '/ZendServer/Api/ripsIssues?application_id='+applicationId+'&scan_id='+scanId
+                    url: `/ZendServer/Api/ripsIssues?application_id=${applicationId}&scan_id=${scanId}&offset=${offset}&limit=${limit}`,
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.issues && res.data.responseData.ui_url) {
-                        $scope.issues.issues = res.data.responseData.issues || [];
+                        var issues = res.data.responseData.issues || [];
                         $scope.issues.ui_url = res.data.responseData.ui_url || '';
+                        $scope.issues.moreIssuesAvailable = issues.length % 200 === 0;
 
-                        $scope.issues.issues.sort(function(a, b) {
-                            return b.type.severity - a.type.severity;
-                        });
+                        if (append) {
+                            $scope.issues.issues = $scope.issues.issues.concat(issues);
+                        } else {
+                            $scope.issues.issues = issues;
+                        }
                     } else {
                         document.fireEvent('toastAlert', {message: errorMessage});
                     }

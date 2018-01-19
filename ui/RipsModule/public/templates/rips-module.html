@@ -22,10 +22,26 @@
 
 <nav id="new-tabs-container">
     <ul>
-        <li ng-click="ui.activateTab('Scans');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'Scans')}">Scans</li>
-        <li ng-click="ui.activateTab('New');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'New')}">New Scan</li>
-        <li ng-click="ui.activateTab('NewFromDocRoot');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'NewFromDocRoot')}">New Scan from Document Root</li>
-        <li ng-click="ui.activateTab('Settings');" class="diagonal-tab" ng-class="{'active': (ui.activeTab == 'Settings')}">Settings</li>
+        <li ng-click="ui.activateTab('Scans');"
+            class="diagonal-tab"
+            ng-class="{'active': (ui.activeTab == 'Scans')}">
+            Scans
+        </li>
+        <li ng-click="ui.activateTab('New');"
+            class="diagonal-tab"
+            ng-class="{'active': (ui.activeTab == 'New')}">
+            New Scan
+        </li>
+        <li ng-click="ui.activateTab('NewFromDocRoot');"
+            class="diagonal-tab"
+            ng-class="{'active': (ui.activeTab == 'NewFromDocRoot')}">
+            New Scan from Document Root
+        </li>
+        <li ng-click="ui.activateTab('Settings');"
+            class="diagonal-tab"
+            ng-class="{'active': (ui.activeTab == 'Settings')}">
+            Connection Settings
+        </li>
     </ul>
 </nav>
 
@@ -41,7 +57,7 @@
             <span ng-show="!scans.loading">
                 <a class="btn btn-default" ng-click="scans.load()">Refresh</a>
             </span>
-                <span ng-show="scans.loading">
+            <span ng-show="scans.loading">
                 <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Refresh</a>
             </span>
         </div>
@@ -110,6 +126,15 @@
                 </td>
             </tr>
         </table>
+
+        <div style="text-align: center;" ng-show="scans.initialLoadFinished && scans.moreScansAvailable">
+            <span ng-show="!scans.loading">
+                <a class="btn btn-default" ng-click="scans.load(true)">Load more</a>
+            </span>
+            <span ng-show="scans.loading">
+                <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Load more</a>
+            </span>
+        </div>
     </div>
 </div>
 
@@ -121,7 +146,7 @@
     </div>
 
     <div ng-if="scan.initialLoadFinished" class="settings-wrapper">
-        <h2>Settings</h2>
+        <h2>New Scan</h2>
 
         <form ng-submit="scan.save()">
             <table class="zend-form-table">
@@ -136,25 +161,53 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="zendApps">Application to scan</label></td>
                     <td>
-                        <select id="zendApps" ng-model="scan.selectedZendApp">
+                        <label for="zendApps">Deployed Application to Scan</label>
+                        <p class="help">Select an application that is deployed with Zend Server for code analysis.</p>
+                    </td>
+                    <td>
+                        <select id="zendApps" ng-model="scan.selectedZendApp" ng-if="scan.zendApps && scan.zendApps.length > 0">
                             <option value="0">-- please select --</option>
                             <option ng-repeat="option in scan.zendApps" value="{{option.path}}">{{option.name}}</option>
                         </select>
+                        <span ng-if="!scan.zendApps || scan.zendApps.length === 0">
+                            <em>
+                                Could not find a <a href="#!/applications/deployment">deployed application</a> in
+                                your Zend Server installation.
+                            </em>
+                        </span>
                     </td>
                 </tr>
                 <tr ng-if="scan.selectedZendApp != 0">
-                    <td><label for="ripsApps">Parent Application in RIPS</label></td>
+                    <td>
+                        <label for="ripsApps">Parent Application in RIPS</label>
+                        <p class="help">
+                            Select a previously scanned application in RIPS to perform a rescan of a new version, or
+                            create a new application.<br/>
+                            <a href="https://kb.ripstech.com/display/DOC/Scans" target="_blank">More Information</a>
+                        </p>
+                    </td>
                     <td>
                         <select id="ripsApps" ng-model="scan.selectedRipsApp">
-                            <option value="0">-- please select --</option>
+                            <option value="0">-- create new application --</option>
                             <option ng-repeat="option in scan.ripsApps" value="{{option.id}}">{{option.name}}</option>
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td><label for="version">Version Name</label></td>
+                <tr ng-if="scan.selectedZendApp != 0 && scan.selectedRipsApp == 0">
+                    <td>
+                        <label for="newAppName">New Application Name</label>
+                        <p class="help">The name of your application that will be used for analysis in RIPS.</p>
+                    </td>
+                    <td>
+                        <input type="text" ng-model="scan.newAppName" id="newAppName" />
+                    </td>
+                </tr>
+                <tr ng-if="scan.selectedZendApp != 0">
+                    <td>
+                        <label for="version">Version Name</label>
+                        <p class="help">The version identifier of your application, e.g. v1.5.</p>
+                    </td>
                     <td>
                         <input type="text" ng-model="scan.version" id="version" />
                     </td>
@@ -182,7 +235,7 @@
     </div>
 
     <div ng-if="scanFromDocRoot.initialLoadFinished" class="settings-wrapper">
-        <h2>Settings</h2>
+        <h2>New Scan from Document Root</h2>
 
         <form ng-submit="scanFromDocRoot.save()">
             <table class="zend-form-table">
@@ -235,16 +288,35 @@
                     </td>
                 </tr>
                 <tr ng-if="scanFromDocRoot.hasScanSpec">
-                	<td><label for="ripsApps">Parent Application in RIPS</label></td>
+                	<td>
+                        <label for="ripsApps">Parent Application in RIPS</label>
+                        <p class="help">
+                            Select a previously scanned application in RIPS to perform a rescan of a new version, or
+                            create a new application.<br/>
+                            <a href="https://kb.ripstech.com/display/DOC/Scans" target="_blank">More Information</a>
+                        </p>
+                    </td>
                     <td>
                         <select id="ripsApps" ng-model="scanFromDocRoot.selectedRipsApp">
-                            <option value="0">-- please select --</option>
+                            <option value="0">-- create new application --</option>
                             <option ng-repeat="option in scanFromDocRoot.ripsApps" value="{{option.id}}">{{option.name}}</option>
                         </select>
                     </td>
                 </tr>
+                <tr ng-if="scanFromDocRoot.hasScanSpec && scanFromDocRoot.selectedRipsApp == 0">
+                    <td>
+                        <label for="newAppNameDoc">New Application Name</label>
+                        <p class="help">The name of your application that will be used for analysis in RIPS.</p>
+                    </td>
+                    <td>
+                        <input type="text" ng-model="scanFromDocRoot.newAppName" id="newAppNameDoc" />
+                    </td>
+                </tr>
                 <tr ng-if="scanFromDocRoot.hasScanSpec">
-                    <td><label for="version">Version Name</label></td>
+                    <td>
+                        <label for="version">Version Name</label>
+                        <p class="help">The version identifier of your application, e.g. v1.5.</p>
+                    </td>
                     <td>
                         <input type="text" ng-model="scanFromDocRoot.version" id="version" />
                     </td>
@@ -272,18 +344,30 @@
     </div>
 
     <div ng-if="settings.initialLoadFinished" class="settings-wrapper">
-        <h2>Settings</h2>
+        <h2>Connection Settings</h2>
 
         <form ng-submit="settings.save()">
             <table class="zend-form-table">
                 <tr>
-                    <td><label for="api_url">API URL</label></td>
+                    <td>
+                        <label for="api_url">API URL</label>
+                        <p class="help">
+                            The URL of your RIPS API, e.g. http://192.168.0.1:8080/.<br/>
+                            <a href="https://kb.ripstech.com/display/DOC/Installing+RIPS" target="_blank">More Information</a>
+                        </p>
+                    </td>
                     <td>
                         <input type="text" ng-model="settings.api_url" id="api_url" />
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="ui_url">UI URL</label></td>
+                    <td>
+                        <label for="ui_url">UI URL</label>
+                        <p class="help">
+                            The base URL to your RIPS User Interface that is used to reference issues, e.g.
+                            http://192.168.0.1/.
+                        </p>
+                    </td>
                     <td>
                         <input type="text" ng-model="settings.ui_url" id="ui_url" />
                     </td>

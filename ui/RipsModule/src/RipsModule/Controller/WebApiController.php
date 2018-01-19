@@ -140,19 +140,34 @@ class WebApiController extends WebAPIActionController {
             'rips_id' => 0,
             'zend_path' => '',
             'version' => '',
+            'new_app_name' => '',
         ]);
 
         $this->validateMandatoryParameters($params, ['rips_id', 'zend_path', 'version']);
         $params['rips_id'] = (int)$params['rips_id'];
 
-        if ($params['rips_id'] === 0 || empty($params['zend_path']) || empty($params['version'])) {
+        if (($params['rips_id'] === 0 && empty($params['new_app_name'])) || empty($params['zend_path']) ||
+                empty($params['version'])) {
             throw new \Exception('Data missing');
         }
 
         $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
-        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(dirname($params['zend_path']), [basename($params['zend_path'])], $zipName);
+        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(
+            dirname($params['zend_path']),
+            [basename($params['zend_path'])],
+            $zipName
+        );
 
         $api = $this->getLocator()->get('\RIPS\Api');
+
+        if ($params['rips_id'] === 0) {
+            try {
+                $application = $api->applications->create(['name' => $params['new_app_name']]);
+                $params['rips_id'] = (int)$application->id;
+            } catch (\Exception $e) {
+                throw new \Exception($e->getCode() . ': Creating new application failed: ' . $e->getMessage());
+            }
+        }
 
         try {
             $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
@@ -220,16 +235,16 @@ class WebApiController extends WebAPIActionController {
             'scan_spec' => '',
             'vhost_id' => '',
             'version' => '',
+            'new_app_name' => '',
         ]);
 
         $this->validateMandatoryParameters($params, ['rips_id', 'scan_spec', 'vhost_id', 'version']);
         $params['rips_id'] = (int)$params['rips_id'];
 
-        if ($params['rips_id'] === 0 || empty($params['scan_spec']) || empty($params['vhost_id']) || empty($params['version'])) {
+        if (($params['rips_id'] === 0 && empty($params['new_app_name'])) || empty($params['scan_spec']) ||
+                empty($params['vhost_id']) || empty($params['version'])) {
             throw new \Exception('Data missing');
         }
-
-        $this->validateMandatoryParameters($params, ['vhost_id']);
 
         $vhostMapper = $this->getLocator()->get('Vhost\Mapper\Vhost');
 
@@ -249,6 +264,15 @@ class WebApiController extends WebAPIActionController {
         $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create($parent, $filesToScan, $zipName);
 
         $api = $this->getLocator()->get('\RIPS\Api');
+
+        if ($params['rips_id'] === 0) {
+            try {
+                $application = $api->applications->create(['name' => $params['new_app_name']]);
+                $params['rips_id'] = (int)$application->id;
+            } catch (\Exception $e) {
+                throw new \Exception($e->getCode() . ': Creating new application failed: ' . $e->getMessage());
+            }
+        }
 
         try {
             $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
@@ -275,6 +299,11 @@ class WebApiController extends WebAPIActionController {
     public function scansAction() {
         $this->isMethodGet();
 
+        $params = $this->getParameters([
+            'offset' => 0,
+            'limit' => 20,
+        ]);
+
         $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
         if (!$this->isConfigurationValid($settings)) {
             return new WebApiResponseContainer([
@@ -287,7 +316,12 @@ class WebApiController extends WebAPIActionController {
         $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
-            $scans = $api->applications->scans()->getAll(null, ['showScanSeverityDistributions' => 1, 'orderBy[id]' => 'desc', 'limit' => 20]);
+            $scans = $api->applications->scans()->getAll(null, [
+                'showScanSeverityDistributions' => 1,
+                'orderBy[id]' => 'desc',
+                'offset' => (int)$params['offset'],
+                'limit' => (int)$params['limit'],
+            ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting scans failed: ' . $e->getMessage());
         }
@@ -310,6 +344,8 @@ class WebApiController extends WebAPIActionController {
         $params = $this->getParameters([
             'application_id' => 0,
             'scan_id' => 0,
+            'offset' => 0,
+            'limit' => 200,
         ]);
 
         $this->validateMandatoryParameters($params, ['application_id', 'scan_id']);
@@ -317,7 +353,13 @@ class WebApiController extends WebAPIActionController {
         $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
-            $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], ['minimal' => 1]);
+            $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], [
+                'minimal' => 1,
+                'orderBy[severity]' => 'desc',
+                'orderBy[id]' => 'desc',
+                'offset' => (int)$params['offset'],
+                'limit' => (int)$params['limit'],
+            ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting issues failed: ' . $e->getMessage());
         }
