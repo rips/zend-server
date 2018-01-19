@@ -97,7 +97,7 @@
                     if (res && res.data && res.data.responseData  && res.data.responseData.success == '1') {
                         document.fireEvent('toastNotification', {message: 'Scan started'});
                         setTimeout(function() {
-                            $scope.scans.load();
+                            $scope.scans.load(false);
                             $scope.ui.activateTab('Scans');
                         }, 1000);
                     } else {
@@ -236,7 +236,7 @@
                     if (res && res.data && res.data.responseData  && res.data.responseData.success == '1') {
                         document.fireEvent('toastNotification', {message: 'Scan started'});
                         setTimeout(function() {
-                            $scope.scans.load();
+                            $scope.scans.load(false);
                             $scope.ui.activateTab('Scans');
                         }, 1000);
                     } else {
@@ -369,7 +369,7 @@
             // loading
             initialLoadFinished: false,
             loading: false,
-            load: function(append = false) {
+            load: function(append) {
                 var errorMessage = 'Error loading scans';
                 $scope.scans.loading = true;
                 var offset = append ? $scope.scans.scans.length : 0;
@@ -377,7 +377,7 @@
 
                 WebAPI({
                     method: 'GET',
-                    url: `/ZendServer/Api/ripsScans?offset=${offset}&limit=${limit}`,
+                    url: '/ZendServer/Api/ripsScans?offset=' + offset + '&limit=' + limit,
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.scans && res.data.responseData.ui_url) {
                         var scans = res.data.responseData.scans || [];
@@ -412,7 +412,7 @@
 
                         if (reload) {
                             setTimeout(function() {
-                                $scope.scans.load();
+                                $scope.scans.load(false);
                             }, 2000);
                         }
                     } else {
@@ -439,7 +439,7 @@
             // loading
             initialLoadFinished: false,
             loading: false,
-            load: function(applicationId, scanId, append = false) {
+            load: function(applicationId, scanId, append) {
                 var errorMessage = 'Error loading issues';
                 $scope.issues.loading = true;
                 var offset = append ? $scope.issues.issues.length : 0;
@@ -447,7 +447,7 @@
 
                 WebAPI({
                     method: 'GET',
-                    url: `/ZendServer/Api/ripsIssues?application_id=${applicationId}&scan_id=${scanId}&offset=${offset}&limit=${limit}`,
+                    url: '/ZendServer/Api/ripsIssues?application_id=' + applicationId + '&scan_id=' + scanId + '&offset=' + offset + '&limit=' + limit,
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.issues && res.data.responseData.ui_url) {
                         var issues = res.data.responseData.issues || [];
@@ -522,7 +522,7 @@
         $scope.scan.load();
         $scope.scanFromDocRoot.load();
         $scope.settings.load();
-        $scope.scans.load();
+        $scope.scans.load(false);
     }]);
 
 	// Helper functions

@@ -55,7 +55,7 @@
     <div ng-if="scans.initialLoadFinished" style="padding: 20px;">
         <div style="text-align: right; margin: 0 0 10px 0;">
             <span ng-show="!scans.loading">
-                <a class="btn btn-default" ng-click="scans.load()">Refresh</a>
+                <a class="btn btn-default" ng-click="scans.load(false)">Refresh</a>
             </span>
             <span ng-show="scans.loading">
                 <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Refresh</a>
@@ -100,7 +100,7 @@
                     <i class="fa fa-spinner fa-spin" ng-if="scan.percent != 100"></i>
                     {{scan.percent}}%
                     <br/>
-                    <div class="progress-bar" style="width: {{scan.percent}}%;"
+                    <div class="progress-bar" ng-style="{'width': scan.percent + '%'}"
                          ng-class="{'severity-critical-bg': scan.percent<=25, 'severity-high-bg': scan.percent>25 && scan.percent <=50, 'severity-medium-bg': scan.percent>50 && scan.percent <=75, 'severity-low-bg': scan.percent>75}">
                     </div>
                 </td>
@@ -108,7 +108,7 @@
                     {{scan.risk}}%
                     <br/>
                     <div class="progress-bar risk">
-                        <div class="spoint" style="left: {{scan.risk}}%"></div>
+                        <div class="spoint" ng-style="{'left': scan.risk + '%'}"></div>
                     </div>
                 </td>
                 <td>
