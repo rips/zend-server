@@ -299,6 +299,11 @@ class WebApiController extends WebAPIActionController {
     public function scansAction() {
         $this->isMethodGet();
 
+        $params = $this->getParameters([
+            'offset' => 0,
+            'limit' => 20,
+        ]);
+
         $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
         if (!$this->isConfigurationValid($settings)) {
             return new WebApiResponseContainer([
@@ -311,7 +316,12 @@ class WebApiController extends WebAPIActionController {
         $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
-            $scans = $api->applications->scans()->getAll(null, ['showScanSeverityDistributions' => 1, 'orderBy[id]' => 'desc', 'limit' => 20]);
+            $scans = $api->applications->scans()->getAll(null, [
+                'showScanSeverityDistributions' => 1,
+                'orderBy[id]' => 'desc',
+                'offset' => (int)$params['offset'],
+                'limit' => (int)$params['limit'],
+            ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting scans failed: ' . $e->getMessage());
         }
@@ -334,6 +344,8 @@ class WebApiController extends WebAPIActionController {
         $params = $this->getParameters([
             'application_id' => 0,
             'scan_id' => 0,
+            'offset' => 0,
+            'limit' => 200,
         ]);
 
         $this->validateMandatoryParameters($params, ['application_id', 'scan_id']);
@@ -341,7 +353,13 @@ class WebApiController extends WebAPIActionController {
         $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
-            $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], ['minimal' => 1, 'limit' => 500]);
+            $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], [
+                'minimal' => 1,
+                'orderBy[severity]' => 'desc',
+                'orderBy[id]' => 'desc',
+                'offset' => (int)$params['offset'],
+                'limit' => (int)$params['limit'],
+            ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting issues failed: ' . $e->getMessage());
         }

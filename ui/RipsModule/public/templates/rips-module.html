@@ -57,7 +57,7 @@
             <span ng-show="!scans.loading">
                 <a class="btn btn-default" ng-click="scans.load()">Refresh</a>
             </span>
-                <span ng-show="scans.loading">
+            <span ng-show="scans.loading">
                 <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Refresh</a>
             </span>
         </div>
@@ -126,6 +126,15 @@
                 </td>
             </tr>
         </table>
+
+        <div style="text-align: center;" ng-show="scans.initialLoadFinished && scans.moreScansAvailable">
+            <span ng-show="!scans.loading">
+                <a class="btn btn-default" ng-click="scans.load(true)">Load more</a>
+            </span>
+            <span ng-show="scans.loading">
+                <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Load more</a>
+            </span>
+        </div>
     </div>
 </div>
 
@@ -160,7 +169,7 @@
                         </select>
                         <span ng-if="!scan.zendApps || scan.zendApps.length === 0">
                             <em>
-                                Could not find any <a href="#!/applications/deployment">deployed applications</a> in
+                                Could not find a <a href="#!/applications/deployment">deployed application</a> in
                                 your Zend Server installation.
                             </em>
                         </span>

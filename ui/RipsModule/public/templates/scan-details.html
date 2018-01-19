@@ -141,6 +141,15 @@
                 </tr>
                 </tbody>
             </table>
+
+            <div style="text-align: center;" ng-show="issues.initialLoadFinished && issues.moreIssuesAvailable">
+                <span ng-show="!issues.loading">
+                    <a class="btn btn-default" ng-click="issues.load(currentScan.application.id, currentScan.id, true)">Load more</a>
+                </span>
+                <span ng-show="issues.loading">
+                    <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Load more</a>
+                </span>
+            </div>
         </div>
     </div>
 </div>

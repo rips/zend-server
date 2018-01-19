@@ -4,6 +4,7 @@
         ['$scope', '$timeout', 'WebAPI', '$rootScope', 'ngDialog', function ($scope, $timeout, WebAPI, $rootScope, ngDialog) {
 
 		$scope.viewScanDetails = function(scan) {
+            $scope.issues.initialLoadFinished = false;
 		    $scope.scanDetails.load(scan.application.id, scan.id);
 			$scope.currentScan = scan;
 			ngDialog.open({
@@ -362,25 +363,29 @@
 
 		$scope.scans = {
 		    scans: [],
-		    ui_url: '',
+            ui_url: '',
+            moreScansAvailable: false,
 
             // loading
             initialLoadFinished: false,
             loading: false,
-            load: function() {
+            load: function(append = false) {
                 var errorMessage = 'Error loading scans';
                 $scope.scans.loading = true;
+                var offset = append ? $scope.scans.scans.length : 0;
+                var limit = !append ? ($scope.scans.scans.length !== 0 ? $scope.scans.scans.length : 20) : 20;
 
                 WebAPI({
                     method: 'GET',
-                    url: '/ZendServer/Api/ripsScans'
+                    url: `/ZendServer/Api/ripsScans?offset=${offset}&limit=${limit}`,
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.scans && res.data.responseData.ui_url) {
-                        $scope.scans.scans = res.data.responseData.scans || [];
+                        var scans = res.data.responseData.scans || [];
+                        $scope.scans.moreScansAvailable = scans.length % 20 === 0;
                         $scope.scans.ui_url = res.data.responseData.ui_url || '';
 
                         var reload = false;
-                        $scope.scans.scans.forEach(function(scan) {
+                        scans.forEach(function(scan) {
                             // Reload after a few seconds if there are still running scans
                             if (scan.percent < 100) {
                                 reload = true;
@@ -398,6 +403,12 @@
                                 scan['risk'] = 100;
                             }
                         });
+
+                        if (append) {
+                            $scope.scans.scans = $scope.scans.scans.concat(scans);
+                        } else {
+                            $scope.scans.scans = scans;
+                        }
 
                         if (reload) {
                             setTimeout(function() {
@@ -422,26 +433,32 @@
 
 		$scope.issues = {
 		    issues: [],
-		    ui_url: '',
+            ui_url: '',
+            moreIssuesAvailable: false,
 
             // loading
             initialLoadFinished: false,
             loading: false,
-            load: function(applicationId, scanId) {
+            load: function(applicationId, scanId, append = false) {
                 var errorMessage = 'Error loading issues';
                 $scope.issues.loading = true;
+                var offset = append ? $scope.issues.issues.length : 0;
+                var limit = !append ? ($scope.issues.issues.length !== 0 ? $scope.issues.issues.length : 200) : 200;
 
                 WebAPI({
                     method: 'GET',
-                    url: '/ZendServer/Api/ripsIssues?application_id='+applicationId+'&scan_id='+scanId
+                    url: `/ZendServer/Api/ripsIssues?application_id=${applicationId}&scan_id=${scanId}&offset=${offset}&limit=${limit}`,
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.issues && res.data.responseData.ui_url) {
-                        $scope.issues.issues = res.data.responseData.issues || [];
+                        var issues = res.data.responseData.issues || [];
                         $scope.issues.ui_url = res.data.responseData.ui_url || '';
+                        $scope.issues.moreIssuesAvailable = issues.length % 200 === 0;
 
-                        $scope.issues.issues.sort(function(a, b) {
-                            return b.type.severity - a.type.severity;
-                        });
+                        if (append) {
+                            $scope.issues.issues = $scope.issues.issues.concat(issues);
+                        } else {
+                            $scope.issues.issues = issues;
+                        }
                     } else {
                         document.fireEvent('toastAlert', {message: errorMessage});
                     }
