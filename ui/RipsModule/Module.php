@@ -101,23 +101,23 @@ class Module {
                 'RIPS\Api' => function(ServiceManager $sm) {
                     // Get RIPS applications
                     $settings = $sm->get('RipsModule\Model\Settings')->getSettings();
-                    
+
                     if (empty($settings['username']) || empty($settings['password'])) {
                         throw new \InvalidArgumentException("Username and password must not be empty");
                     }
-                    
+
                     $api = new API(
                         $settings['username'],
                         $settings['password'],
                         ['base_uri' => $settings['api_url']]
                     );
-                    
+
                     return $api;
                 },
                 \RipsModule\Service\RipsApp::class => function(ServiceManager $sm) {
                     // Get RIPS applications
                     $api = $sm->get('RIPS\Api');
-                    
+
                     return new \RipsModule\Service\RipsApp($api);
                 }
             ],
