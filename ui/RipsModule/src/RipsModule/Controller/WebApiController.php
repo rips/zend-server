@@ -317,7 +317,7 @@ class WebApiController extends WebAPIActionController {
         $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
-            $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], ['minimal' => 1]);
+            $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], ['minimal' => 1, 'limit' => 500]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting issues failed: ' . $e->getMessage());
         }
