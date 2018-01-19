@@ -79,6 +79,11 @@
                     'new_app_name': $scope.scan.newAppName,
                 };
 
+                if (data['rips_id'] === '0' && (!data['new_app_name'] || data['new_app_name'] === '')) {
+                    document.fireEvent('toastAlert', {message: 'Please enter an application name.'});
+                    return;
+                }
+
                 // default error message
                 var errorMessage = 'Error starting scan';
 
@@ -138,6 +143,7 @@
             scanSpec: '',
             version: new Date().toISOString(),
             loading: false,
+            newAppName: '',
 
             // loading
             initialLoadFinished: false,
@@ -209,7 +215,13 @@
                     'scan_spec': $scope.scanFromDocRoot.scanSpec,
                     'vhost_id': $scope.scanFromDocRoot.selectedDocRoot,
                     'version': $scope.scanFromDocRoot.version,
+                    'new_app_name': $scope.scanFromDocRoot.newAppName,
                 };
+
+                if (data['rips_id'] === '0' && (!data['new_app_name'] || data['new_app_name'] === '')) {
+                    document.fireEvent('toastAlert', {message: 'Please enter an application name.'});
+                    return;
+                }
 
                 // default error message
                 var errorMessage = 'Error starting scan';
@@ -223,7 +235,7 @@
                     if (res && res.data && res.data.responseData  && res.data.responseData.success == '1') {
                         document.fireEvent('toastNotification', {message: 'Scan started'});
                         setTimeout(function() {
-                            $scope.scanFromDocRoot.load();
+                            $scope.scans.load();
                             $scope.ui.activateTab('Scans');
                         }, 1000);
                     } else {

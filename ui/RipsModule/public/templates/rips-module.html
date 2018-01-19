@@ -266,11 +266,17 @@
                 	<td><label for="ripsApps">Parent Application in RIPS</label></td>
                     <td>
                         <select id="ripsApps" ng-model="scanFromDocRoot.selectedRipsApp">
-                            <option value="0">-- please select --</option>
+                            <option value="0">-- create new application --</option>
                             <option ng-repeat="option in scanFromDocRoot.ripsApps" value="{{option.id}}">{{option.name}}</option>
                         </select>
                     </td>
                 </tr>
+                <tr ng-if="scanFromDocRoot.hasScanSpec && scanFromDocRoot.selectedRipsApp == 0">
+                        <td><label for="newAppNameDoc">New Application Name</label></td>
+                        <td>
+                            <input type="text" ng-model="scanFromDocRoot.newAppName" id="newAppNameDoc" />
+                        </td>
+                    </tr>
                 <tr ng-if="scanFromDocRoot.hasScanSpec">
                     <td><label for="version">Version Name</label></td>
                     <td>
