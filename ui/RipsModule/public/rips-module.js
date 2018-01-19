@@ -38,6 +38,7 @@
             selectedRipsApp: '0',
             selectedZendApp: '0',
             version: new Date().toISOString(),
+            newAppName: '',
 
             // loading
             initialLoadFinished: false,
@@ -75,6 +76,7 @@
                     'rips_id': $scope.scan.selectedRipsApp,
                     'zend_path': $scope.scan.selectedZendApp,
                     'version': $scope.scan.version,
+                    'new_app_name': $scope.scan.newAppName,
                 };
 
                 // default error message
@@ -106,6 +108,21 @@
                 });
             },
         };
+
+        // Listen to changes to the selected zend app to update the value of the new application name
+        // (if it is empty)
+        $scope.$watch('scan.selectedZendApp', function(newValue, oldValue) {
+            if ($scope.scan.newAppName === '' && newValue != 0) {
+                // Search for the path
+                var zendApp = $scope.scan.zendApps.find(function (element) {
+                    return element.path === newValue;
+                });
+
+                if (zendApp) {
+                    $scope.scan.newAppName = zendApp.name;
+                }
+            }
+        });
 
         $scope.$watch('scanFromDocRoot.selectedDocRoot', function(newValue, oldValue) {
             if (newValue == 0) return;

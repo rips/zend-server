@@ -152,24 +152,36 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="zendApps">Application to scan</label></td>
+                    <td><label for="zendApps">Deployed Application to scan</label></td>
                     <td>
-                        <select id="zendApps" ng-model="scan.selectedZendApp">
+                        <select id="zendApps" ng-model="scan.selectedZendApp" ng-if="scan.zendApps && scan.zendApps.length > 0">
                             <option value="0">-- please select --</option>
                             <option ng-repeat="option in scan.zendApps" value="{{option.path}}">{{option.name}}</option>
                         </select>
+                        <span ng-if="!scan.zendApps || scan.zendApps.length === 0">
+                            <em>
+                                Could not find any <a href="#!/applications/deployment">deployed applications</a> in
+                                your Zend Server installation.
+                            </em>
+                        </span>
                     </td>
                 </tr>
                 <tr ng-if="scan.selectedZendApp != 0">
                     <td><label for="ripsApps">Parent Application in RIPS</label></td>
                     <td>
                         <select id="ripsApps" ng-model="scan.selectedRipsApp">
-                            <option value="0">-- please select --</option>
+                            <option value="0">-- create new application --</option>
                             <option ng-repeat="option in scan.ripsApps" value="{{option.id}}">{{option.name}}</option>
                         </select>
                     </td>
                 </tr>
-                <tr>
+                <tr ng-if="scan.selectedZendApp != 0 && scan.selectedRipsApp == 0">
+                    <td><label for="newAppName">New Application Name</label></td>
+                    <td>
+                        <input type="text" ng-model="scan.newAppName" id="newAppName" />
+                    </td>
+                </tr>
+                <tr ng-if="scan.selectedZendApp != 0">
                     <td><label for="version">Version Name</label></td>
                     <td>
                         <input type="text" ng-model="scan.version" id="version" />

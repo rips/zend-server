@@ -140,19 +140,34 @@ class WebApiController extends WebAPIActionController {
             'rips_id' => 0,
             'zend_path' => '',
             'version' => '',
+            'new_app_name' => '',
         ]);
 
-        $this->validateMandatoryParameters($params, ['rips_id', 'zend_path', 'version']);
+        $this->validateMandatoryParameters($params, ['rips_id', 'zend_path', 'version', 'new_app_name']);
         $params['rips_id'] = (int)$params['rips_id'];
 
-        if ($params['rips_id'] === 0 || empty($params['zend_path']) || empty($params['version'])) {
+        if (($params['rips_id'] === 0 && empty($params['new_app_name'])) || empty($params['zend_path']) ||
+                empty($params['version'])) {
             throw new \Exception('Data missing');
         }
 
         $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
-        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(dirname($params['zend_path']), [basename($params['zend_path'])], $zipName);
+        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(
+            dirname($params['zend_path']),
+            [basename($params['zend_path'])],
+            $zipName
+        );
 
         $api = $this->getLocator()->get('\RIPS\Api');
+
+        if ($params['rips_id'] === 0) {
+            try {
+                $application = $api->applications->create(['name' => $params['new_app_name']]);
+                $params['rips_id'] = (int)$application->id;
+            } catch (\Exception $e) {
+                throw new \Exception($e->getCode() . ': Creating new application failed: ' . $e->getMessage());
+            }
+        }
 
         try {
             $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
