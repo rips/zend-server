@@ -76,12 +76,12 @@
         </div>
 
         <div class="tab-section" ng-if="dialogUi.activeTab == 'Issues'">
-            <div style="text-align: right; margin: 0 0 10px 0;">
+            <div ng-show="issues.initialLoadFinished" style="text-align: right; margin: 0 0 10px 0;">
                 <span ng-show="!issues.loading">
-                    <a class="btn btn-default" ng-click="issues.load(currentScan.application.id, currentScan.id)">Load Issues</a>
+                    <a class="btn btn-default" ng-click="issues.load(currentScan.application.id, currentScan.id, false)">Refresh</a>
                 </span>
                     <span ng-show="issues.loading">
-                    <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Load Issues</a>
+                    <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Refresh</a>
                 </span>
             </div>
 
@@ -141,6 +141,15 @@
                 </tr>
                 </tbody>
             </table>
+
+            <div ng-show="!issues.initialLoadFinished" style="text-align: center; margin-top: 20px;">
+                <span ng-show="!issues.loading">
+                    <a class="btn btn-default" ng-click="issues.load(currentScan.application.id, currentScan.id, false)">Load issues</a>
+                </span>
+                    <span ng-show="issues.loading">
+                    <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Load issues</a>
+                </span>
+            </div>
 
             <div style="text-align: center;" ng-show="issues.initialLoadFinished && issues.moreIssuesAvailable">
                 <span ng-show="!issues.loading">
