@@ -433,7 +433,7 @@
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.scans && res.data.responseData.ui_url) {
                         var scans = res.data.responseData.scans || [];
-                        $scope.scans.moreScansAvailable = scans.length % 20 === 0;
+                        $scope.scans.moreScansAvailable = res.data.responseData.more;
                         $scope.scans.ui_url = res.data.responseData.ui_url || '';
 
                         var reload = false;

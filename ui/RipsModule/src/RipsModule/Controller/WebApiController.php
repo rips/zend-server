@@ -304,7 +304,7 @@ class WebApiController extends WebAPIActionController {
         
         $params = $this->getParameters([
             'offset' => 0,
-            'limit' => 5,
+            'limit' => 20,
         ]);
         
         $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
@@ -323,15 +323,23 @@ class WebApiController extends WebAPIActionController {
                 'showScanSeverityDistributions' => 1,
                 'orderBy[id]' => 'desc',
                 'offset' => (int)$params['offset'],
-                'limit' => (int)$params['limit'],
+                'limit' => (int)$params['limit'] + 1,
             ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting scans failed: ' . $e->getMessage());
         }
         
+        $more = false;
+        if (count($scans) > (int)$params['limit']) {
+            array_pop($scans);
+            $more = true;
+        }
+        
         return new WebApiResponseContainer([
             'scans' => $scans,
             'ui_url' => $settings['ui_url'],
+            'count' => count($scans),
+            'more' => $more
         ]);
     }
     
