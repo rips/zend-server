@@ -1,17 +1,16 @@
 language: php
 php:
-  - '7.1'
+- '7.1'
 install:
-  - composer install
+- composer install
 script:
-  - ls -la
-  - zip -v
-  - zip -r ZS-plugin-rips.zip deployment.json EULA LICENSE logo.png README.md ui/ vendor/
-  
+- zip -r ZS-plugin-rips.zip deployment.json EULA LICENSE logo.png README.md ui/ vendor/
 deploy:
   provider: releases
-  api_key: $GITHUB_API_KEY
+  api_key:
+    secure: G2pkAjKPCoC3aC9qtImWfO+dBoGiukBnzd0CG5aZStt8ACcPNQElzqATOpU6aL1B+tItNdnvyjz2PXKlW6JQhjuFTmoI63ZF7g0aWtrK31fkS54zoFlzRG5Xepn1pK9t5Nl29yBUSWYPmm75ezYEmriFviFBnzuxxhPrKD/trznHmMHpKZF24zto1YWMG4kxCTcupmkrKAHAsy4fW249ZPD+JXvD+vprp0Yp7N18nsxqhk4jOc+2DpZd9xLtekhmyqc+16Rbj+6YC71D0Xwm7bzsSADxFrjrbyV0ZcPPJwu4Zui0avm1zAMQVtXa+zsYM1h6f12WlZS/FIJWbVTYpmraQjL+Cg5JdaR3wYoXdcaAhzDARq8S0LFQ38XJzBVOQFwXA0quW6DtCSoJNXK9E7GLd+nVb0UD4ZMMOMcAcJf87x4uAb+LgJwdCn6o2U8qBhk0XShMVnNDmyuAFWLcTAbBdPu8eIS8nb5vKAg7AG2QkHC3STtr4C64VRimglY7g6cBKZucyWqb9SxbgEMEpaUwN7dvC7F/1+Muuhtn/dEmfkmIdPvSgmJLqLPjZLK9YShDSXMOJQDEe7W+e3CVh9BEAQsSktkdjWrrvEKJDDNWNT8TUAP71ljpUBEGDi2UglCkCx/ySlJ/vv4hXGfM0BL58UwL4BOXzO+pUSpNk80=
   file: ZS-plugin-rips.zip
-  skip_cleanup: true
+  skip_cleanup: true 
   on:
+    repo: 5square/ZS-plugin-rips
     tags: true
