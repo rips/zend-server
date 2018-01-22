@@ -405,7 +405,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <span ng-show="!settings.isSaving">
+                        <span ng-show="!settings.isSaving && settings.isTestSuccessful">
                             <a class="btn btn-blue" ng-click="settings.save()" ng-disabled="!settings.initialLoadFinished">Save</a>
                         </span>
                             <span ng-show="settings.isSaving">
