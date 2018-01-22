@@ -282,11 +282,24 @@
             },
         };
 
+        $scope.$watch('settings.username', function(newValue, oldValue) {
+            if (oldValue == '') return;
+            $scope.settings.readyToTest = true;
+            $scope.settings.isTestSuccessful = false;
+        });
+        
+        $scope.$watch('settings.password', function(newValue, oldValue) {
+            if (oldValue == '') return;
+            $scope.settings.readyToTest = true;
+            $scope.settings.isTestSuccessful = false;
+        });
+        
 		$scope.settings = {
 		    username: '',
 		    password: '',
 		    api_url: '',
 		    ui_url: '',
+		    readyToTest: false,
 
             // loading
             initialLoadFinished: false,
@@ -343,6 +356,8 @@
                         $scope.scan.signedIn = true;
                         $scope.scans.signedIn = true;
                         $scope.scanFromDocRoot.signedIn = true;
+                        
+                        $scope.settings.readyToTest = false;
                     } else {
                         document.fireEvent('toastAlert', {message: errorMessage});
                     }

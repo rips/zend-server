@@ -304,7 +304,7 @@ class WebApiController extends WebAPIActionController {
         
         $params = $this->getParameters([
             'offset' => 0,
-            'limit' => 20,
+            'limit' => 5,
         ]);
         
         $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();

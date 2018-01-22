@@ -396,24 +396,24 @@
                 <tr>
                     <td><label for="password">Password</label></td>
                     <td>
-                        <input type="password" ng-model="settings.password" id="password" />
+                        <input type="password" ng-model="settings.password" ng-focus="settings.password = ''" id="password" placeholder="Enter your password"/>
                     </td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <span ng-show="!settings.isTesting">
+                        <span ng-show="!settings.isTesting && settings.readyToTest">
                             <a class="btn btn-default" ng-click="settings.test()">Test Connection</a>
                         </span>
                         <span ng-show="settings.isTesting">
                             <a class="btn btn-default" disabled><i class="fa fa-spinner fa-spin"></i> Test Connection</a>
                         </span>
 
-                        <span class="test-badge" ng-show="settings.isTestSuccessful && settings.initialTestFinished">
+                        <span class="test-badge" ng-show="settings.isTestSuccessful && settings.initialTestFinished && settings.readyToTest">
                             <i class="glyphicons glyphicons-ok-sign"></i>
                         </span>
 
-                        <span class="test-badge" ng-show="!settings.isTestSuccessful && settings.initialTestFinished">
+                        <span class="test-badge" ng-show="!settings.isTestSuccessful && settings.initialTestFinished && settings.readyToTest">
                             <i class="glyphicons glyphicons-remove-sign"></i>
                         </span>
                     </td>
