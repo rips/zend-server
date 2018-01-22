@@ -14,9 +14,12 @@ class WebApiController extends WebAPIActionController {
     public function settingsAction() {
         $this->isMethodGet();
         
-        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
+        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings')->getSettings();
+        
+        $settings['password'] = str_pad('', strlen($settings['password']), '-');
+        
         return [
-            'settings' => $settings->getSettings(),
+            'settings' => $settings,
         ];
     }
     
