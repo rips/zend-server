@@ -358,6 +358,10 @@
                         $scope.scanFromDocRoot.signedIn = true;
                         
                         $scope.settings.readyToTest = false;
+                        
+                        $scope.scan.load();
+                        $scope.scans.load();
+                        $scope.scanFromDocRoot.load();
                     } else {
                         document.fireEvent('toastAlert', {message: errorMessage});
                     }
