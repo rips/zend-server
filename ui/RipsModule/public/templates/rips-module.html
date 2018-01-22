@@ -52,7 +52,12 @@
         </div>
     </div>
 
-    <div ng-if="scans.initialLoadFinished" style="padding: 20px;">
+	<div ng-if="scans.initialLoadFinished && !scan.signedIn" style="padding: 20px;">
+		<p>There's no valid connection to a RIPS server.</p>
+		<p>Please check the <a class="btn btn-blue" ng-click="ui.activeTab = 'Settings'">Connection Settings</a></p>
+	</div>
+	
+    <div ng-if="scans.initialLoadFinished && scan.signedIn" style="padding: 20px;">
         <div style="text-align: right; margin: 0 0 10px 0;">
             <span ng-show="!scans.loading">
                 <a class="btn btn-default" ng-click="scans.load(false)">Refresh</a>
@@ -145,7 +150,12 @@
         </div>
     </div>
 
-    <div ng-if="scan.initialLoadFinished" class="settings-wrapper">
+	<div ng-if="scans.initialLoadFinished && !scans.signedIn" style="padding: 20px;">
+		<p>There's no valid connection to a RIPS server.</p>
+		<p>Please check the <a class="btn btn-blue" ng-click="ui.activeTab = 'Settings'">Connection Settings</a></p>
+	</div>
+	
+    <div ng-if="scans.initialLoadFinished && scans.signedIn" class="settings-wrapper">
         <h2>New Scan</h2>
 
         <form ng-submit="scan.save()">
@@ -233,8 +243,13 @@
             <i class="fa fa-spin fa-spinner"></i> Loading...
         </div>
     </div>
+    
+    <div ng-if="scanFromDocRoot.initialLoadFinished && !scanFromDocRoot.signedIn" style="padding: 20px;">
+		<p>There's no valid connection to a RIPS server.</p>
+		<p>Please check the <a class="btn btn-blue" ng-click="ui.activeTab = 'Settings'">Connection Settings</a></p>
+	</div>
 
-    <div ng-if="scanFromDocRoot.initialLoadFinished" class="settings-wrapper">
+    <div ng-if="scanFromDocRoot.initialLoadFinished && scanFromDocRoot.signedIn" class="settings-wrapper">
         <h2>New Scan from Document Root</h2>
 
         <form ng-submit="scanFromDocRoot.save()">
