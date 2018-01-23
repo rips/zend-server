@@ -1,6 +1,6 @@
 # RIPS Zend Server Plugin
 
-[![Build Status](https://travis-ci.org/5square/ZS-plugin-rips.svg?branch=master)](https://travis-ci.org/5square/ZS-plugin-rips)
+[![Build Status](https://travis-ci.org/rips/zend-server.svg?branch=master)](https://travis-ci.org/rips/zend-server.svg?branch=master)
 
 ## Build
 
