@@ -10,6 +10,7 @@ deploy:
   api_key:
     secure: nl87KEXrAHqDYJr01nBO6lSAouipMTE75NI1E4k5ocoSlBdJY4gAoGrS5e/5L89hw7ZvToWSmJr+oNKfSnA88R1LsTw+2YFaJFAcijJmaa2VeiCVe9u8xtkL9nbmRxDDwBOTnXWoEX35f9GBfnaaaBJwIny8sbdLMPFRe+iDrdtGT0mYz938F73z04zSMwHTuPj4+eBR8pDYVeSI/LcW1Hzv3rK1g24rtX497XETnPYsMPJV927VNQLa2ybujurXn8TEWYxL94rfjXzZb/rWGc4LscXW1ZOn/z+3WmTjQ2XrLt7q+I0kUI1nPusldE4+T10L34z4MwosgpLJfulvaQmRnQ0zhJCHUFMk4b3SkriOQWDZBx0De8RTdC4gd7uSJdGh2rdjyHk1Fs1R4SGjSzpdGu/pPaqXuGIcQLMVs3LrbaxFugNWRkXsZ6z/UNck+DZLH7S028fcfXloZLF6HYhJC51P8F39Ym2+XoqqdU8KU1gmKz3Up/jjVoQT+pwsN/WwN/6L/JQlIZS5pNVyIL3n48elgzLN71uYKiuIcL78G1o+2IbARaeJF/ZI+uThgzYJRrVDiFUU+ObairHEZ00ANz+ghRIaduhK6WWcQYzM3uKQ8r/HQyzfBvhVz0l2uIPkyhwZdaay3KJmxg0PahErVdvLBMXVNilWaR5r9Is=
   file: ZS-plugin-rips.zip
+  skip_cleanup: true
   on:
     repo: rips/zend-server
     tags: true
