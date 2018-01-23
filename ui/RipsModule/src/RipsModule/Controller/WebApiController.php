@@ -149,41 +149,41 @@ class WebApiController extends WebAPIActionController {
         $params['rips_id'] = (int)$params['rips_id'];
 
         if (($params['rips_id'] === 0 && empty($params['new_app_name'])) || empty($params['zend_path']) ||
-            empty($params['version'])) {
-                throw new \Exception('Data missing');
-            }
+                empty($params['version'])) {
+            throw new \Exception('Data missing');
+        }
 
-            $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
-            $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(
-                dirname($params['zend_path']),
-                [basename($params['zend_path'])],
-                $zipName
-            );
+        $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
+        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(
+            dirname($params['zend_path']),
+            [basename($params['zend_path'])],
+            $zipName
+        );
 
-            $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get('\RIPS\Api');
 
-            if ($params['rips_id'] === 0) {
-                try {
-                    $application = $api->applications->create(['name' => $params['new_app_name']]);
-                    $params['rips_id'] = (int)$application->id;
-                } catch (\Exception $e) {
-                    throw new \Exception($e->getCode() . ': Creating new application failed: ' . $e->getMessage());
-                }
-            }
-
+        if ($params['rips_id'] === 0) {
             try {
-                $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
-                $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
+                $application = $api->applications->create(['name' => $params['new_app_name']]);
+                $params['rips_id'] = (int)$application->id;
             } catch (\Exception $e) {
-                throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
+                throw new \Exception($e->getCode() . ': Creating new application failed: ' . $e->getMessage());
             }
+        }
 
-            // Remove the temporary archive (was already uploaded)
-            unlink($zipPath);
+        try {
+            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
+            $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
+        }
 
-            return new WebApiResponseContainer([
-                'success' => '1'
-            ]);
+        // Remove the temporary archive (was already uploaded)
+        unlink($zipPath);
+
+        return new WebApiResponseContainer([
+            'success' => '1'
+        ]);
     }
 
     /**
