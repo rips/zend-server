@@ -1,16 +1,16 @@
 language: php
 php:
-- '7.1'
+  - 7.1
 install:
-- composer install
+  - composer install
 script:
-- zip -r ZS-plugin-rips.zip deployment.json EULA LICENSE logo.png README.md ui/ vendor/
+  - zip -r ZS-plugin-rips.zip deployment.json EULA LICENSE logo.png README.md ui/ vendor/
 deploy:
   provider: releases
   api_key:
-    secure: G2pkAjKPCoC3aC9qtImWfO+dBoGiukBnzd0CG5aZStt8ACcPNQElzqATOpU6aL1B+tItNdnvyjz2PXKlW6JQhjuFTmoI63ZF7g0aWtrK31fkS54zoFlzRG5Xepn1pK9t5Nl29yBUSWYPmm75ezYEmriFviFBnzuxxhPrKD/trznHmMHpKZF24zto1YWMG4kxCTcupmkrKAHAsy4fW249ZPD+JXvD+vprp0Yp7N18nsxqhk4jOc+2DpZd9xLtekhmyqc+16Rbj+6YC71D0Xwm7bzsSADxFrjrbyV0ZcPPJwu4Zui0avm1zAMQVtXa+zsYM1h6f12WlZS/FIJWbVTYpmraQjL+Cg5JdaR3wYoXdcaAhzDARq8S0LFQ38XJzBVOQFwXA0quW6DtCSoJNXK9E7GLd+nVb0UD4ZMMOMcAcJf87x4uAb+LgJwdCn6o2U8qBhk0XShMVnNDmyuAFWLcTAbBdPu8eIS8nb5vKAg7AG2QkHC3STtr4C64VRimglY7g6cBKZucyWqb9SxbgEMEpaUwN7dvC7F/1+Muuhtn/dEmfkmIdPvSgmJLqLPjZLK9YShDSXMOJQDEe7W+e3CVh9BEAQsSktkdjWrrvEKJDDNWNT8TUAP71ljpUBEGDi2UglCkCx/ySlJ/vv4hXGfM0BL58UwL4BOXzO+pUSpNk80=
+    secure: nl87KEXrAHqDYJr01nBO6lSAouipMTE75NI1E4k5ocoSlBdJY4gAoGrS5e/5L89hw7ZvToWSmJr+oNKfSnA88R1LsTw+2YFaJFAcijJmaa2VeiCVe9u8xtkL9nbmRxDDwBOTnXWoEX35f9GBfnaaaBJwIny8sbdLMPFRe+iDrdtGT0mYz938F73z04zSMwHTuPj4+eBR8pDYVeSI/LcW1Hzv3rK1g24rtX497XETnPYsMPJV927VNQLa2ybujurXn8TEWYxL94rfjXzZb/rWGc4LscXW1ZOn/z+3WmTjQ2XrLt7q+I0kUI1nPusldE4+T10L34z4MwosgpLJfulvaQmRnQ0zhJCHUFMk4b3SkriOQWDZBx0De8RTdC4gd7uSJdGh2rdjyHk1Fs1R4SGjSzpdGu/pPaqXuGIcQLMVs3LrbaxFugNWRkXsZ6z/UNck+DZLH7S028fcfXloZLF6HYhJC51P8F39Ym2+XoqqdU8KU1gmKz3Up/jjVoQT+pwsN/WwN/6L/JQlIZS5pNVyIL3n48elgzLN71uYKiuIcL78G1o+2IbARaeJF/ZI+uThgzYJRrVDiFUU+ObairHEZ00ANz+ghRIaduhK6WWcQYzM3uKQ8r/HQyzfBvhVz0l2uIPkyhwZdaay3KJmxg0PahErVdvLBMXVNilWaR5r9Is=
   file: ZS-plugin-rips.zip
-  skip_cleanup: true 
+  skip_cleanup: true
   on:
-    repo: 5square/ZS-plugin-rips
+    repo: rips/zend-server
     tags: true

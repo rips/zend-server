@@ -1,6 +1,7 @@
 {
     "name": "rips/zend-server",
     "description": "A RIPS plugin for Zend Server",
+    "version": "0.3.0",
     "authors": [
         {
             "name": "Martin Bednorz",
