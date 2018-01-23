@@ -11,12 +11,15 @@ class WebApiController extends WebAPIActionController {
      *
      * @return array
      */
-	public function settingsAction() {
+    public function settingsAction() {
         $this->isMethodGet();
 
-        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
+        $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings')->getSettings();
+
+        $settings['password'] = str_pad('', strlen($settings['password']), '-');
+
         return [
-            'settings' => $settings->getSettings(),
+            'settings' => $settings,
         ];
     }
 
@@ -27,7 +30,7 @@ class WebApiController extends WebAPIActionController {
      */
     public function storeSettingsAction() {
         $this->isMethodPost();
-
+        
         // Get and check the parameters
         $params = $this->getParameters([
             'username' => '',
@@ -105,7 +108,6 @@ class WebApiController extends WebAPIActionController {
             foreach ($vhostsResult as $vhost) {
                 $vhosts[] = $vhost;
             }
-
         } catch (\Exception $ex) {
             throw new \Exception(_t('Could not retrieve vhost information'), \Exception::INTERNAL_SERVER_ERROR, $ex);
         }
@@ -320,15 +322,23 @@ class WebApiController extends WebAPIActionController {
                 'showScanSeverityDistributions' => 1,
                 'orderBy[id]' => 'desc',
                 'offset' => (int)$params['offset'],
-                'limit' => (int)$params['limit'],
+                'limit' => (int)$params['limit'] + 1,
             ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting scans failed: ' . $e->getMessage());
         }
 
+        $more = false;
+        if (count($scans) > (int)$params['limit']) {
+            array_pop($scans);
+            $more = true;
+        }
+
         return new WebApiResponseContainer([
             'scans' => $scans,
             'ui_url' => $settings['ui_url'],
+            'count' => count($scans),
+            'more' => $more
         ]);
     }
 
@@ -436,7 +446,7 @@ class WebApiController extends WebAPIActionController {
      */
     private function isConfigurationValid($settings) {
         if (!isset($settings['username']) || empty($settings['username']) ||
-            !isset($settings['password']) || empty($settings['password'])) {
+                !isset($settings['password']) || empty($settings['password'])) {
             return false;
         }
         return true;

@@ -1,5 +1,7 @@
 # RIPS Zend Server Plugin
 
+[![Build Status](https://travis-ci.org/5square/ZS-plugin-rips.svg?branch=master)](https://travis-ci.org/5square/ZS-plugin-rips)
+
 ## Build
 
 Install dependencies and create ZIP archive:

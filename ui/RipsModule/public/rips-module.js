@@ -32,6 +32,32 @@
                 }
             },
         };
+        
+        $scope.signinStatus = function () {
+            if (!$scope.scan.initialLoadFinished || !$scope.settings.initialLoadFinished) return;
+            
+            if ($scope.scan.ripsApps.length > 0) return;
+            
+            if ($scope.settings.username) return;
+            
+            document.fireEvent('toastWarning', {message: "Cannot find a valid connection to a RIPS server."});
+            
+            $scope.scan.signedIn = false;
+            $scope.scans.signedIn = false;
+            $scope.scanFromDocRoot.signedIn = false;
+        }
+        
+        $scope.$watch('scan.initialLoadFinished', function(newValue, oldValue) {
+            if ($scope.scan.initialLoadFinished == false) return;
+
+            $scope.signinStatus();
+        });
+        
+        $scope.$watch('settings.initialLoadFinished', function(newValue, oldValue) {
+            if ($scope.settings.initialLoadFinished == false) return;
+
+            $scope.signinStatus();
+        });
 
         $scope.scan = {
             zendApps: [],
@@ -40,6 +66,7 @@
             selectedZendApp: '0',
             version: new Date().toISOString(),
             newAppName: '',
+            signedIn: true,
 
             // loading
             initialLoadFinished: false,
@@ -145,6 +172,7 @@
             version: new Date().toISOString(),
             loading: false,
             newAppName: '',
+            signedIn: true,
 
             // loading
             initialLoadFinished: false,
@@ -254,11 +282,24 @@
             },
         };
 
+        $scope.$watch('settings.username', function(newValue, oldValue) {
+            if (oldValue == '') return;
+            $scope.settings.readyToTest = true;
+            $scope.settings.isTestSuccessful = false;
+        });
+        
+        $scope.$watch('settings.password', function(newValue, oldValue) {
+            if (oldValue == '') return;
+            $scope.settings.readyToTest = true;
+            $scope.settings.isTestSuccessful = false;
+        });
+        
 		$scope.settings = {
 		    username: '',
 		    password: '',
 		    api_url: '',
 		    ui_url: '',
+		    readyToTest: false,
 
             // loading
             initialLoadFinished: false,
@@ -311,6 +352,16 @@
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData  && res.data.responseData.success == '1') {
                         document.fireEvent('toastNotification', {message: 'Settings stored'});
+                        
+                        $scope.scan.signedIn = true;
+                        $scope.scans.signedIn = true;
+                        $scope.scanFromDocRoot.signedIn = true;
+                        
+                        $scope.settings.readyToTest = false;
+                        
+                        $scope.scan.load();
+                        $scope.scans.load();
+                        $scope.scanFromDocRoot.load();
                     } else {
                         document.fireEvent('toastAlert', {message: errorMessage});
                     }
@@ -365,6 +416,7 @@
 		    scans: [],
             ui_url: '',
             moreScansAvailable: false,
+            signedIn: true,
 
             // loading
             initialLoadFinished: false,
@@ -381,7 +433,7 @@
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.scans && res.data.responseData.ui_url) {
                         var scans = res.data.responseData.scans || [];
-                        $scope.scans.moreScansAvailable = scans.length % 20 === 0;
+                        $scope.scans.moreScansAvailable = res.data.responseData.more;
                         $scope.scans.ui_url = res.data.responseData.ui_url || '';
 
                         var reload = false;

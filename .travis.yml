@@ -1,10 +1,10 @@
 language: php
 php:
-- 7.1
+  - 7.1
 install:
-- composer install
+  - composer install
 script:
-- zip -r ZS-plugin-rips.zip deployment.json EULA LICENSE logo.png README.md ui/ vendor/
+  - zip -r ZS-plugin-rips.zip deployment.json EULA LICENSE logo.png README.md ui/ vendor/
 deploy:
   provider: releases
   api_key:
