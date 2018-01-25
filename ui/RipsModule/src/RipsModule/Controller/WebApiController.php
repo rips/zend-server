@@ -148,8 +148,9 @@ class WebApiController extends WebAPIActionController {
         $this->validateMandatoryParameters($params, ['rips_id', 'zend_path', 'version']);
         $params['rips_id'] = (int)$params['rips_id'];
 
-        if (($params['rips_id'] === 0 && empty($params['new_app_name'])) || empty($params['zend_path']) ||
-                empty($params['version'])) {
+        if (($params['rips_id'] === 0 && empty($params['new_app_name'])) || empty($params['zend_path'])
+            || empty($params['version'])
+        ) {
             throw new \Exception('Data missing');
         }
 
