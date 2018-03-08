@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/rips/zend-server.svg?branch=master)](https://travis-ci.org/rips/zend-server)
 
+[Documentation](https://kb.ripstech.com/display/DOC/Zend+Server)
+
 ## Build
 
 Install dependencies and create ZIP archive:
