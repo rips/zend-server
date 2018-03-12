@@ -6,7 +6,7 @@ use ZendServer\FS\FS;
 
 class Zip {
 
-    public function create($rootPath, array $fileList, $zipName) {
+    public function create($rootPath, array $fileList, $zipName, $includeBasename = true) {
         // Create temporary zip file with a unique name
         $path = FS::createPath(
             getCfgVar('zend.temp_dir'),
@@ -47,7 +47,7 @@ class Zip {
                         $relativePath = substr($filePath, strlen($fileToScan) + 1);
 
                         // Add current file to archive
-                        $zip->addFile($filePath, $relativePath);
+                        $zip->addFile($filePath, ($includeBasename ? basename($fileToScan) : '') . '/' . $relativePath);
                     }
                 }
                 else {

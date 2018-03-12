@@ -158,7 +158,8 @@ class WebApiController extends WebAPIActionController {
         $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(
             dirname($params['zend_path']),
             [basename($params['zend_path'])],
-            $zipName
+            $zipName,
+            false
         );
 
         $api = $this->getLocator()->get('\RIPS\Api');
@@ -174,7 +175,11 @@ class WebApiController extends WebAPIActionController {
 
         try {
             $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
-            $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
+            $api->applications->scans()->create($params['rips_id'], [
+                'version' => $params['version'],
+                'upload' => (int)$upload->id,
+                'uploadRemoved' => true,
+            ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
         }
@@ -264,7 +269,12 @@ class WebApiController extends WebAPIActionController {
         $filesToScan = explode("\n", $params['scan_spec']);
 
         $zipName = 'rips_' .  $params['rips_id'] . '_' . (new \DateTime())->getTimestamp() . '.zip';
-        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create($parent, $filesToScan, $zipName);
+        $zipPath = $this->getLocator()->get(\RipsModule\Service\Zip::class)->create(
+            $parent,
+            $filesToScan,
+            $zipName,
+            true
+        );
 
         $api = $this->getLocator()->get('\RIPS\Api');
 
@@ -279,7 +289,11 @@ class WebApiController extends WebAPIActionController {
 
         try {
             $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
-            $api->applications->scans()->create($params['rips_id'], ['version' => $params['version'], 'upload' => (int)$upload->id]);
+            $api->applications->scans()->create($params['rips_id'], [
+                'version' => $params['version'],
+                'upload' => (int)$upload->id,
+                'uploadRemoved' => true,
+            ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
         }
