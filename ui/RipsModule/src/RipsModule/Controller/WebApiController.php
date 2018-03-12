@@ -30,7 +30,7 @@ class WebApiController extends WebAPIActionController {
      */
     public function storeSettingsAction() {
         $this->isMethodPost();
-        
+
         // Get and check the parameters
         $params = $this->getParameters([
             'username' => '',
