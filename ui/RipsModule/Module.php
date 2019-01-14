@@ -102,12 +102,12 @@ class Module {
                     // Get RIPS applications
                     $settings = $sm->get('RipsModule\Model\Settings')->getSettings();
 
-                    if (empty($settings['username']) || empty($settings['password'])) {
-                        throw new \InvalidArgumentException("Username and password must not be empty");
+                    if (empty($settings['email']) || empty($settings['password'])) {
+                        throw new \InvalidArgumentException("Email and password must not be empty");
                     }
 
                     $api = new API(
-                        $settings['username'],
+                        $settings['email'],
                         $settings['password'],
                         ['base_uri' => $settings['api_url']]
                     );

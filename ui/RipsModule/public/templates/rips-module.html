@@ -90,13 +90,13 @@
             <tr ng-repeat="scan in scans.scans track by scan.id">
                 <td>{{scan.id}}</td>
                 <td>
-                    <a href="{{scans.ui_url}}/main/(applications/{{scan.application.id}}//sidebar:scans/{{scan.application.id}})"
+                    <a href="{{scans.ui_url}}/application/{{scan.application.id}}"
                        target="_blank">
                         {{scan.application.name}}
                     </a>
                 </td>
                 <td>
-                    <a href="{{scans.ui_url}}/main/(scans/{{scan.application.id}}/{{scan.id}}//sidebar:types/{{scan.application.id}}/{{scan.id}}/0)"
+                    <a href="{{scans.ui_url}}/scan/{{scan.application.id}}/{{scan.id}}"
                        target="_blank">
                         {{scan.version}}
                     </a>
@@ -119,10 +119,10 @@
                 <td>
                     <table class="severities">
                         <tr>
-                            <td class="severity-critical">{{scan.severity_distributions.Critical}}</td>
-                            <td class="severity-high">{{scan.severity_distributions.High}}</td>
-                            <td class="severity-medium">{{scan.severity_distributions.Medium}}</td>
-                            <td class="severity-low">{{scan.severity_distributions.Low}}</td>
+                            <td class="severity-critical">{{scan.severity_distributions.critical}}</td>
+                            <td class="severity-high">{{scan.severity_distributions.high}}</td>
+                            <td class="severity-medium">{{scan.severity_distributions.medium}}</td>
+                            <td class="severity-low">{{scan.severity_distributions.low}}</td>
                         </tr>
                     </table>
                 </td>
@@ -132,7 +132,7 @@
             </tr>
         </table>
 
-        <div style="text-align: center;" ng-show="scans.initialLoadFinished && scans.moreScansAvailable">
+        <div style="text-align: center;" ng-show="scans.initialLoadFinished && scans.moreScansAvailable && (scans.length != 0)">
             <span ng-show="!scans.loading">
                 <a class="btn btn-default" ng-click="scans.load(true)">Load more</a>
             </span>
@@ -388,9 +388,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="username">Username</label></td>
+                    <td><label for="email">Email</label></td>
                     <td>
-                        <input type="text" ng-model="settings.username" id="username" />
+                        <input type="text" ng-model="settings.email" id="email" />
                     </td>
                 </tr>
                 <tr>
