@@ -177,9 +177,10 @@ class WebApiController extends WebAPIActionController {
         try {
             $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath)->getDecodedData();
             $api->applications->scans()->create($params['rips_id'], [
+                'source' => 'ci-build-zendserver',
                 'version' => $params['version'],
                 'upload' => (int)$upload->id,
-                'uploadRemoved' => true,
+                'uploadRemoved' => true
             ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
@@ -294,6 +295,7 @@ class WebApiController extends WebAPIActionController {
                 'version' => $params['version'],
                 'upload' => (int)$upload->id,
                 'uploadRemoved' => true,
+                'source' => 'ci-build-zendserver'
             ]);
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
