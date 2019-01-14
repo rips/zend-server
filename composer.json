@@ -10,6 +10,6 @@
         }
     ],
     "require": {
-        "rips/connector": "~2.9"
+        "rips/connector": "^3.0.0"
     }
 }

@@ -38,7 +38,7 @@
             
             if ($scope.scan.ripsApps.length > 0) return;
             
-            if ($scope.settings.username) return;
+            if ($scope.settings.email) return;
             
             document.fireEvent('toastWarning', {message: "Cannot find a valid connection to a RIPS server."});
             
@@ -282,7 +282,7 @@
             },
         };
 
-        $scope.$watch('settings.username', function(newValue, oldValue) {
+        $scope.$watch('settings.email', function(newValue, oldValue) {
             if (oldValue == '') return;
             $scope.settings.readyToTest = true;
             $scope.settings.isTestSuccessful = false;
@@ -295,7 +295,7 @@
         });
         
 		$scope.settings = {
-		    username: '',
+		    email: '',
 		    password: '',
 		    api_url: '',
 		    ui_url: '',
@@ -312,7 +312,7 @@
                     url: '/ZendServer/Api/ripsSettings'
                 }).then(function(res) {
                     if (res && res.data && res.data.responseData && res.data.responseData.settings) {
-                        $scope.settings.username = res.data.responseData.settings.username || '';
+                        $scope.settings.email = res.data.responseData.settings.email || '';
                         $scope.settings.password = res.data.responseData.settings.password || '';
                         $scope.settings.api_url = res.data.responseData.settings.api_url || '';
                         $scope.settings.ui_url = res.data.responseData.settings.ui_url || '';
@@ -335,7 +335,7 @@
             save: function() {
                 // collect the data
                 var data = {
-                    'username': $scope.settings.username,
+                    'email': $scope.settings.email,
                     'password': $scope.settings.password,
                     'api_url': $scope.settings.api_url,
                     'ui_url': $scope.settings.ui_url,
@@ -383,7 +383,7 @@
             test: function() {
                 // collect the data
                 var data = {
-                    'username': $scope.settings.username,
+                    'email': $scope.settings.email,
                     'password': $scope.settings.password,
                     'api_url': $scope.settings.api_url,
                 };
@@ -406,7 +406,7 @@
                 };
 
                 httpRequest.open("GET", ripsRemoveTrailingSlash(data.api_url) + "/status", true);
-                httpRequest.setRequestHeader('X-API-Username', data.username);
+                httpRequest.setRequestHeader('X-API-Username', data.email);
                 httpRequest.setRequestHeader('X-API-Password', data.password);
                 httpRequest.send(null);
             },
@@ -444,11 +444,12 @@
                             }
 
                             // Add calculated risk data to scans
+                            scan['severity_distributions'] = scan.severity_distributions.total;
                             scan['risk'] = Math.floor(
-                                (parseInt(scan.severity_distributions.Critical)*5) +
-                                (parseInt(scan.severity_distributions.High)*2) +
-                                parseInt(scan.severity_distributions.Medium) +
-                                (parseInt(scan.severity_distributions.Low)*0.5)
+                                (parseInt(scan.severity_distributions['critical'])*5) +
+                                (parseInt(scan.severity_distributions['high'])*2) +
+                                parseInt(scan.severity_distributions['medium']) +
+                                (parseInt(scan.severity_distributions['low'])*0.5)
                             );
 
                             if (scan['risk'] > 100) {
@@ -584,10 +585,10 @@
             bindto: '#severity-chart',
             data: {
                 columns: [
-                    ['Critical', stats.issue_severities.Critical],
-                    ['High', stats.issue_severities.High],
-                    ['Medium', stats.issue_severities.Medium],
-                    ['Low', stats.issue_severities.Low],
+                    ['Critical', stats.issue_severities.total.critical],
+                    ['High', stats.issue_severities.total.high],
+                    ['Medium', stats.issue_severities.total.medium],
+                    ['Low', stats.issue_severities.total.low],
                 ],
                 colors: {
                     Critical: '#e12e2e',
@@ -603,7 +604,7 @@
         var colors = {};
         types.forEach(function(entry) {
             columns.push([entry.type.name, entry.amount]);
-            colors[entry.type.name] = '#' + entry.type.color;
+            colors[entry.type.name] = SEVERITY_COLOR_GRADIENT[entry.type.severity];
         });
 
         c3.generate({
@@ -625,3 +626,106 @@
     }
 
 }());
+
+const SEVERITY_COLOR_GRADIENT = [
+    '#a7a863',
+    '#a8a763',
+    '#a8a662',
+    '#a9a562',
+    '#aaa462',
+    '#aaa361',
+    '#aba261',
+    '#aca161',
+    '#aca060',
+    '#ad9f60',
+    '#ae9e60',
+    '#ae9d5f',
+    '#af9c5f',
+    '#af9b5f',
+    '#b09a5e',
+    '#b1995e',
+    '#b1985e',
+    '#b2975d',
+    '#b3965d',
+    '#b3955d',
+    '#b4945c',
+    '#b5935c',
+    '#b5925c',
+    '#b6915b',
+    '#b7905b',
+    '#b7905b',
+    '#b88f5a',
+    '#b98e5a',
+    '#b98d5a',
+    '#ba8c59',
+    '#bb8b59',
+    '#bb8a59',
+    '#bc8958',
+    '#bc8858',
+    '#bd8758',
+    '#be8657',
+    '#be8557',
+    '#bf8457',
+    '#c08356',
+    '#c08256',
+    '#c18156',
+    '#c28055',
+    '#c27f55',
+    '#c37e55',
+    '#c47d54',
+    '#c47c54',
+    '#c57b54',
+    '#c67a53',
+    '#c67953',
+    '#c77853',
+    '#c87753',
+    '#c87652',
+    '#c97552',
+    '#c97452',
+    '#ca7351',
+    '#cb7251',
+    '#cb7151',
+    '#cc7050',
+    '#cd6f50',
+    '#cd6e50',
+    '#ce6d4f',
+    '#cf6c4f',
+    '#cf6b4f',
+    '#d06a4e',
+    '#d1694e',
+    '#d1684e',
+    '#d2674d',
+    '#d3664d',
+    '#d3654d',
+    '#d4644c',
+    '#d5634c',
+    '#d5624c',
+    '#d6614b',
+    '#d6604b',
+    '#d75f4b',
+    '#d85f4a',
+    '#d85e4a',
+    '#d95d4a',
+    '#da5c49',
+    '#da5b49',
+    '#db5a49',
+    '#dc5948',
+    '#dc5848',
+    '#dd5748',
+    '#de5647',
+    '#de5547',
+    '#df5447',
+    '#e05346',
+    '#e05246',
+    '#e15146',
+    '#e25045',
+    '#e24f45',
+    '#e34e45',
+    '#e34d44',
+    '#e44c44',
+    '#e54b44',
+    '#e54a43',
+    '#e64943',
+    '#e74843',
+    '#e74742',
+];
