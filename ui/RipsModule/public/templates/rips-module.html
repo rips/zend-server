@@ -90,13 +90,13 @@
             <tr ng-repeat="scan in scans.scans track by scan.id">
                 <td>{{scan.id}}</td>
                 <td>
-                    <a href="{{scans.ui_url}}/main/(applications/{{scan.application.id}}//sidebar:scans/{{scan.application.id}})"
+                    <a href="{{scans.ui_url}}/application/{{scan.application.id}}"
                        target="_blank">
                         {{scan.application.name}}
                     </a>
                 </td>
                 <td>
-                    <a href="{{scans.ui_url}}/main/(scans/{{scan.application.id}}/{{scan.id}}//sidebar:types/{{scan.application.id}}/{{scan.id}}/0)"
+                    <a href="{{scans.ui_url}}/scan/{{scan.application.id}}/{{scan.id}}"
                        target="_blank">
                         {{scan.version}}
                     </a>
