@@ -2,6 +2,7 @@
 
 namespace RipsModule\Controller;
 
+use RIPS\Connector\API;
 use ZendServer\Mvc\Controller\WebAPIActionController;
 use WebAPI\View\WebApiResponseContainer;
 
@@ -33,13 +34,13 @@ class WebApiController extends WebAPIActionController {
 
         // Get and check the parameters
         $params = $this->getParameters([
-            'username' => '',
+            'email' => '',
             'password' => '',
             'api_url' => '',
             'ui_url' => '',
         ]);
 
-        $this->validateMandatoryParameters($params, ['username', 'password', 'api_url', 'ui_url']);
+        $this->validateMandatoryParameters($params, ['email', 'password', 'api_url', 'ui_url']);
 
         // Store the settings
         $settings = $this->getServiceLocator()->get('RipsModule\Model\Settings');
@@ -166,7 +167,7 @@ class WebApiController extends WebAPIActionController {
 
         if ($params['rips_id'] === 0) {
             try {
-                $application = $api->applications->create(['name' => $params['new_app_name']]);
+                $application = $api->applications->create(['name' => $params['new_app_name']])->getDecodedData();
                 $params['rips_id'] = (int)$application->id;
             } catch (\Exception $e) {
                 throw new \Exception($e->getCode() . ': Creating new application failed: ' . $e->getMessage());
@@ -174,7 +175,7 @@ class WebApiController extends WebAPIActionController {
         }
 
         try {
-            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
+            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath)->getDecodedData();
             $api->applications->scans()->create($params['rips_id'], [
                 'version' => $params['version'],
                 'upload' => (int)$upload->id,
@@ -280,7 +281,7 @@ class WebApiController extends WebAPIActionController {
 
         if ($params['rips_id'] === 0) {
             try {
-                $application = $api->applications->create(['name' => $params['new_app_name']]);
+                $application = $api->applications->create(['name' => $params['new_app_name']])->getDecodedData();
                 $params['rips_id'] = (int)$application->id;
             } catch (\Exception $e) {
                 throw new \Exception($e->getCode() . ': Creating new application failed: ' . $e->getMessage());
@@ -288,7 +289,7 @@ class WebApiController extends WebAPIActionController {
         }
 
         try {
-            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath);
+            $upload = $api->applications->uploads()->create($params['rips_id'], basename($zipPath), $zipPath)->getDecodedData();
             $api->applications->scans()->create($params['rips_id'], [
                 'version' => $params['version'],
                 'upload' => (int)$upload->id,
@@ -330,15 +331,16 @@ class WebApiController extends WebAPIActionController {
         }
 
         $scans = [];
+        /** @var API $api */
         $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
             $scans = $api->applications->scans()->getAll(null, [
-                'showScanSeverityDistributions' => 1,
-                'orderBy[id]' => 'desc',
+                'customFilter' => '{"severityDistribution":{"show":true}}',
+                'orderBy' => '{"id":"desc"}',
                 'offset' => (int)$params['offset'],
                 'limit' => (int)$params['limit'] + 1,
-            ]);
+            ])->getDecodedData();
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting scans failed: ' . $e->getMessage());
         }
@@ -375,22 +377,30 @@ class WebApiController extends WebAPIActionController {
 
         $this->validateMandatoryParameters($params, ['application_id', 'scan_id']);
 
+        /** @var API $api */
         $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
             $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], [
                 'minimal' => 1,
-                'orderBy[severity]' => 'desc',
-                'orderBy[id]' => 'desc',
+                'orderBy' => '{"severity":"desc", "id":"desc"}',
                 'offset' => (int)$params['offset'],
                 'limit' => (int)$params['limit'],
-            ]);
+            ])->getDecodedData();
+            $allIssueTypesRaw = $api->applications->scans()->issues()->types()->getAll()->getDecodedData();
+            $allIssueTypes = [];
+            foreach ($allIssueTypesRaw as $issue) {
+                $allIssueTypes[$issue->id] = $issue;
+            }
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting issues failed: ' . $e->getMessage());
         }
 
-        $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
+        foreach ($issues as &$issue) {
+            $issue->type = $allIssueTypes[$issue->type->id];
+        }
 
+        $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
         return new WebApiResponseContainer([
             'issues' => $issues,
             'ui_url' => $settings['ui_url'],
@@ -413,26 +423,26 @@ class WebApiController extends WebAPIActionController {
 
         $this->validateMandatoryParameters($params, array('application_id', 'scan_id'));
 
+        /** @var API $api */
         $api = $this->getLocator()->get('\RIPS\Api');
 
         try {
-            $scan = $api->applications->scans()->getById($params['application_id'], $params['scan_id']);
-            $stats = $api->applications->scans()->getStats($params['application_id'], $params['scan_id']);
+            $scan = $api->applications->scans()->getById($params['application_id'], $params['scan_id'])->getDecodedData();
+            $allIssueTypesRaw = $api->applications->scans()->issues()->types()->getAll()->getDecodedData();
+            $allIssueTypes = [];
+            foreach ($allIssueTypesRaw as $issue) {
+                $allIssueTypes[$issue->id] = $issue;
+            }
+            $stats = $api->applications->scans()->getStats($params['application_id'], $params['scan_id'])->getDecodedData();
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting scan failed: ' . $e->getMessage());
-        }
-
-        // Create associative array of scanned issue types
-        $typeInfos = [];
-        foreach ($scan->issue_types as $type) {
-            $typeInfos[$type->tag] = $type;
         }
 
         // Create type data that is easier to handle by the ui
         $typeData = [];
         foreach ($stats->issue_types as $key => $value) {
             $typeData[] = [
-                'type' => $typeInfos[$key],
+                'type' => $allIssueTypes[$key],
                 'amount' => $value,
             ];
         }
@@ -443,7 +453,6 @@ class WebApiController extends WebAPIActionController {
         });
 
         $settings = $this->getLocator()->get('RipsModule\Model\Settings')->getSettings();
-
         return new WebApiResponseContainer([
             'scan' => $scan,
             'stats' => $stats,
@@ -460,7 +469,7 @@ class WebApiController extends WebAPIActionController {
      * @return boolean
      */
     private function isConfigurationValid($settings) {
-        if (!isset($settings['username']) || empty($settings['username']) ||
+        if (!isset($settings['email']) || empty($settings['email']) ||
                 !isset($settings['password']) || empty($settings['password'])) {
             return false;
         }

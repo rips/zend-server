@@ -14,7 +14,7 @@ class RipsApp {
 
     public function getAll() {
         try {
-            $apps = $this->api->applications->getAll(['orderBy[name]' => 'asc']);
+            $apps = $this->api->applications->getAll(['orderBy' => '{"name":"asc"}'])->getDecodedData();
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting applications failed: ' . $e->getMessage());
         }
