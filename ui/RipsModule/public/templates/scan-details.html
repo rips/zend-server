@@ -38,7 +38,7 @@
                     <th>Severity</th>
                     <th>Type</th>
                     <th>CWE</th>
-                    <th>OWASP Top 10</th>
+                    <th>OWASP 2013 Top 10</th>
                     <th>SANS 25</th>
                     <th>PCI DSS</th>
                     <th style="text-align: right;">#Issues</th>
@@ -63,7 +63,7 @@
                             {{type.type.cwe}}
                         </a>
                     </td>
-                    <td>{{type.type.owasp}}</td>
+                    <td>{{type.type.owasp2013}}</td>
                     <td>
                         <span ng-if="type.type.sans && type.type.sans != 0">{{type.type.sans}}</span>
                         <span ng-if="!type.type.sans || type.type.sans == 0"><em>none</em></span>
