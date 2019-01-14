@@ -132,7 +132,7 @@
             </tr>
         </table>
 
-        <div style="text-align: center;" ng-show="scans.initialLoadFinished && scans.moreScansAvailable">
+        <div style="text-align: center;" ng-show="scans.initialLoadFinished && scans.moreScansAvailable && (scans.length != 0)">
             <span ng-show="!scans.loading">
                 <a class="btn btn-default" ng-click="scans.load(true)">Load more</a>
             </span>
