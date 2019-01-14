@@ -386,6 +386,7 @@ class WebApiController extends WebAPIActionController {
                 'orderBy' => '{"severity":"desc", "id":"desc"}',
                 'offset' => (int)$params['offset'],
                 'limit' => (int)$params['limit'],
+                'filter' => '{"__equal": {"negativelyReviewed":"false"}}'
             ])->getDecodedData();
             $allIssueTypesRaw = $api->applications->scans()->issues()->types()->getAll()->getDecodedData();
             $allIssueTypes = [];
