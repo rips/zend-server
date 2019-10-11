@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+    zend:
+        image: php-zendserver
+        ports:
+          - "7000:80"
+          - "7001:10081"
+        volumes:
+          - "../:/usr/local/zend/var/plugins/RIPS"
+          - "/tmp/zend:/var/www/html"
+        environment:
+            ZS_ADMIN_PASSWORD: 123456
+        networks:
+          - devenv
+
+networks:
+    devenv:
+        external: true
+        name: devenv_main
