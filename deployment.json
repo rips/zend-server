@@ -5,7 +5,7 @@
     "type": ["ui"],
     "logo": "logo.png",
     "eula": "EULA",
-    "readme": "README.md",
+    "readme": "ZEND.md",
     "dependencies": {
         "plugin": {
             "min": "1.0.0"
