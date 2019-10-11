@@ -297,12 +297,12 @@ class WebApiController extends WebAPIActionController {
                 'uploadRemoved' => true,
                 'source' => 'ci-build-zendserver'
             ]);
+            // Remove the temporary archive (was already uploaded)
+            unlink($zipPath);
         } catch (\Exception $e) {
+            unlink($zipPath);
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
         }
-
-        // Remove the temporary archive (was already uploaded)
-        unlink($zipPath);
 
         return new WebApiResponseContainer([
             'success' => '1',
@@ -436,7 +436,7 @@ class WebApiController extends WebAPIActionController {
             foreach ($allIssueTypesRaw as $issue) {
                 $allIssueTypes[$issue->id] = $issue;
             }
-            $stats = $api->applications->scans()->getStats($params['application_id'], $params['scan_id'])->getDecodedData();
+            $stats = $api->applications->scans()->getStats($params['application_id'], [$params['scan_id']])->getDecodedData();
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting scan failed: ' . $e->getMessage());
         }
