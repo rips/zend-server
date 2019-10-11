@@ -163,7 +163,7 @@ class WebApiController extends WebAPIActionController {
             false
         );
 
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         if ($params['rips_id'] === 0) {
             try {
@@ -278,7 +278,7 @@ class WebApiController extends WebAPIActionController {
             true
         );
 
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         if ($params['rips_id'] === 0) {
             try {
@@ -334,7 +334,7 @@ class WebApiController extends WebAPIActionController {
 
         $scans = [];
         /** @var API $api */
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         try {
             $scans = $api->applications->scans()->getAll(null, [
@@ -380,7 +380,7 @@ class WebApiController extends WebAPIActionController {
         $this->validateMandatoryParameters($params, ['application_id', 'scan_id']);
 
         /** @var API $api */
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         try {
             $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], [
@@ -427,7 +427,7 @@ class WebApiController extends WebAPIActionController {
         $this->validateMandatoryParameters($params, array('application_id', 'scan_id'));
 
         /** @var API $api */
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         try {
             $scan = $api->applications->scans()->getById($params['application_id'], $params['scan_id'])->getDecodedData();

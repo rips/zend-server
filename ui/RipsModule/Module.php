@@ -98,7 +98,7 @@ class Module {
                     $adapter = $connector->createDbAdapter(Connector::DB_CONTEXT_RIPS);
                     return $adapter;
                 },
-                'RIPS\Api' => function(ServiceManager $sm) {
+                API::class => function(ServiceManager $sm) {
                     // Get RIPS applications
                     $settings = $sm->get('RipsModule\Model\Settings')->getSettings();
 
@@ -116,7 +116,7 @@ class Module {
                 },
                 \RipsModule\Service\RipsApp::class => function(ServiceManager $sm) {
                     // Get RIPS applications
-                    $api = $sm->get('RIPS\Api');
+                    $api = $sm->get(API::class);
 
                     return new \RipsModule\Service\RipsApp($api);
                 }
