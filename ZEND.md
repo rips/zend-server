@@ -1,3 +1,3 @@
-RIPS Zend-Server2019 plugin
+RIPS Security Analysis Plugin
 ====
-[Documentation](https://kb.ripstech.com/display/DOC/Zend+Server)
+Please visit our [documentation](https://kb.ripstech.com/display/DOC/Zend+Server) for more details.
