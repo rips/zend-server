@@ -163,7 +163,7 @@ class WebApiController extends WebAPIActionController {
             false
         );
 
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         if ($params['rips_id'] === 0) {
             try {
@@ -278,7 +278,7 @@ class WebApiController extends WebAPIActionController {
             true
         );
 
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         if ($params['rips_id'] === 0) {
             try {
@@ -297,12 +297,12 @@ class WebApiController extends WebAPIActionController {
                 'uploadRemoved' => true,
                 'source' => 'ci-build-zendserver'
             ]);
+            // Remove the temporary archive (was already uploaded)
+            unlink($zipPath);
         } catch (\Exception $e) {
+            unlink($zipPath);
             throw new \Exception($e->getCode() . ': Starting scan failed: ' . $e->getMessage());
         }
-
-        // Remove the temporary archive (was already uploaded)
-        unlink($zipPath);
 
         return new WebApiResponseContainer([
             'success' => '1',
@@ -334,7 +334,7 @@ class WebApiController extends WebAPIActionController {
 
         $scans = [];
         /** @var API $api */
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         try {
             $scans = $api->applications->scans()->getAll(null, [
@@ -380,7 +380,7 @@ class WebApiController extends WebAPIActionController {
         $this->validateMandatoryParameters($params, ['application_id', 'scan_id']);
 
         /** @var API $api */
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         try {
             $issues = $api->applications->scans()->issues()->getAll($params['application_id'], $params['scan_id'], [
@@ -427,7 +427,7 @@ class WebApiController extends WebAPIActionController {
         $this->validateMandatoryParameters($params, array('application_id', 'scan_id'));
 
         /** @var API $api */
-        $api = $this->getLocator()->get('\RIPS\Api');
+        $api = $this->getLocator()->get(API::class);
 
         try {
             $scan = $api->applications->scans()->getById($params['application_id'], $params['scan_id'])->getDecodedData();
@@ -436,7 +436,7 @@ class WebApiController extends WebAPIActionController {
             foreach ($allIssueTypesRaw as $issue) {
                 $allIssueTypes[$issue->id] = $issue;
             }
-            $stats = $api->applications->scans()->getStats($params['application_id'], $params['scan_id'])->getDecodedData();
+            $stats = $api->applications->scans()->getStats($params['application_id'], [$params['scan_id']])->getDecodedData();
         } catch (\Exception $e) {
             throw new \Exception($e->getCode() . ': Getting scan failed: ' . $e->getMessage());
         }

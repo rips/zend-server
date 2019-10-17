@@ -6,12 +6,12 @@ return [
             'ripsModuleWebApi-1_12' => 'RipsModule\Controller\WebApiController',
         ],
     ],
-    
+
     // Registered view helpers
     'view_helpers' => [
         'invokables' => [],
     ],
-    
+
     // ACL for the plugin - currently only allowed for admins
     'acl' => [
         'route' => [
@@ -21,19 +21,19 @@ return [
             ],
         ],
     ],
-    
+
     // Configure where Zend can find the views
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../views',
         ],
     ],
-    
+
     // Service manager configs
     'service_manager' => [
         'invokables' => [],
     ],
-    
+
     // Placement and settings of the plugin
     // In this case, it is placed in default --> security
     'navigation' => [
@@ -63,11 +63,11 @@ return [
             ],
         ],
     ],
-    
+
     // Defined API routes for the AngularJS interface
     'webapi_routes' => [
         'ripsSettings' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsSettings',
                 'defaults' => [
@@ -78,7 +78,7 @@ return [
             ],
         ],
         'ripsStoreSettings' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsStoreSettings',
                 'defaults' => [
@@ -89,7 +89,7 @@ return [
             ],
         ],
         'ripsScan' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsScan',
                 'defaults' => [
@@ -100,7 +100,7 @@ return [
             ],
         ],
         'ripsScanSpec' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsScanSpec',
                 'defaults' => [
@@ -111,7 +111,7 @@ return [
             ],
         ],
         'ripsScanDocRoot' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsScanDocRoot',
                 'defaults' => [
@@ -122,7 +122,7 @@ return [
             ],
         ],
         'ripsCurrentApplications' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsCurrentApplications',
                 'defaults' => [
@@ -133,7 +133,7 @@ return [
             ],
         ],
         'ripsCurrentDocRoots' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsCurrentDocRoots',
                 'defaults' => [
@@ -144,7 +144,7 @@ return [
             ],
         ],
         'ripsScans' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsScans',
                 'defaults' => [
@@ -155,7 +155,7 @@ return [
             ],
         ],
         'ripsScanDetails' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsScanDetails',
                 'defaults' => [
@@ -166,7 +166,7 @@ return [
             ],
         ],
         'ripsIssues' => [
-            'type'	=> 'Zend\Mvc\Router\Http\Literal',
+            'type'	=> Literal::class,
             'options' => [
                 'route'	=> '/Api/ripsIssues',
                 'defaults' => [
