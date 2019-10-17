@@ -1,11 +1,11 @@
 {
     "name" : "RIPS",
     "display_name" : "RIPS Code Analysis",
-    "version" : "2.0.0",
+    "version" : "2.1.0",
     "type": ["ui"],
     "logo": "logo.png",
     "eula": "EULA",
-    "readme": "README.md",
+    "readme": "ZEND.md",
     "dependencies": {
         "plugin": {
             "min": "1.0.0"
